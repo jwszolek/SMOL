@@ -5,3 +5,7 @@ Network description language (SMOL), which has been designed to describe the nec
 ## Requirements
 * Java
 * Groovy
+
+## TODO
+* Add support for MQTT 
+* Design API for communication with DESMO-J framework
