@@ -1,15 +1,16 @@
-package UTest
+package test.groovy
 
-import SMOH.*
-import Utils.*
-
-import com.SMOF.*
-import com.UI.DrawSmolEngine;
-import com.prototype.DrawSecond;
-import com.sample.DrawFirst
-import com.utils.CustomEdge
-import com.utils.INode
-import com.utils.NodeBase
+import main.java.com.UI.DrawSmolEngine
+import main.java.com.prototype.DrawSecond
+import main.java.com.sample.DrawFirst
+import main.java.com.utils.CustomEdge
+import main.java.com.utils.NodeBase
+import main.groovy.smoh.CanNode
+import main.groovy.smoh.HBase
+import main.groovy.smoh.MainNode
+import main.groovy.smoh.SANode
+import main.groovy.smoh.SpeedUnit
+import main.groovy.utils.Helper
 
 
 DrawFirst df = new DrawFirst();

@@ -1,7 +1,8 @@
-package UTest
+package test.groovy
 
-import SMOH.*
-import com.sample.DrawFirst
+import main.java.com.sample.DrawFirst
+import main.groovy.smoh.HBase
+import main.groovy.smoh.MainNode
 
 println "testowy napis"
 

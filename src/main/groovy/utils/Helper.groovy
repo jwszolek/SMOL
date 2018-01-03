@@ -1,12 +1,10 @@
-package Utils
+package main.groovy.utils
 
-import com.utils.CustomEdge
-import com.utils.LinkBase
-import com.utils.NodeBase
-import com.utils.NodeType
-import java.util.HashMap;
-import SMOH.HBase;
-
+import main.java.com.utils.CustomEdge
+import main.java.com.utils.LinkBase
+import main.java.com.utils.NodeBase
+import main.java.com.utils.NodeType
+import main.groovy.smoh.HBase
 
 class Helper {
 	def private static GenerateEdgeList(List<NodeBase> lstNodeBase, HashMap<String, HBase> varList) {
