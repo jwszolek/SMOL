@@ -1,4 +1,4 @@
-package SMOH;
+package main.groovy.smoh;
 
 public enum SpeedUnit {
 	Kb,

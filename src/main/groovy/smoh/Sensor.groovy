@@ -1,4 +1,4 @@
-package SMOH
+package main.groovy.smoh
 
 class Sensor extends HBase {
 	public String caption_local;

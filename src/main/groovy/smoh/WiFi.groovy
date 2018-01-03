@@ -1,6 +1,6 @@
-package SMOH
+package main.groovy.smoh
 
-import com.utils.NodeType;
+import main.java.com.utils.NodeType;
 
 class WiFi extends HBase {
 
