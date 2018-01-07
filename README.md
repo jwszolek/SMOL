@@ -9,8 +9,8 @@ Network description language (SMOL), which has been designed to describe the nec
 
 
 ## Requirements
-* Java
-* Groovy
+* Java 1.7
+* Groovy 2.4
 
 ## Installation
 
