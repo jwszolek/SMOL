@@ -2,6 +2,9 @@
 
 Network description language (SMOL), which has been designed to describe the necessary network functions, mechanisms, and devices; for the purpose of their computer simulation and verification. 
 
+<p align="center">
+  <img src="readme-media/graph_smol.png?raw=true" alt="ELK"/>
+</p>
 
 
 
