@@ -5,16 +5,19 @@ import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
 import desmoj.core.simulator.TimeSpan;
 
-import java.util.concurrent.TimeUnit;
-
 
 public class NetworkModel extends Model{
 
 
     private ContDistUniform tcpMessageGeneratorTime;
 
-    protected Queue<TCPMessage> ethQueue;
-    protected Queue<TCPMessage> ethLink;
+    public Queue<EthFrame> getEthQueue() {
+        return ethQueue;
+    }
+
+    protected Queue<TCPMessage> msgQueue;
+    protected Queue<EthFrame> ethQueue;
+    protected Queue<EthFrame> ethLink;
 
     public NetworkModel(Model owner, String modelName, boolean showInReport, boolean showInTrace) {
         super(owner, modelName, showInReport, showInTrace);
@@ -28,15 +31,25 @@ public class NetworkModel extends Model{
 
     @Override
     public void doInitialSchedules() {
-        EthAdapter adapter = new EthAdapter(this, "ethadap",true);
-        adapter.schedule(new TimeSpan(0));
+
+        TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",true);
+        msgGenertor.schedule(new TimeSpan(0));
+
+        EthAdapter monitor = new EthAdapter(this, "eth-adapter",true);
+        monitor.schedule(new TimeSpan(0));
+
+
 
     }
 
     @Override
     public void init() {
-        ethQueue = new Queue<TCPMessage>(this,"ethQueue",true,true);
+        msgQueue = new Queue<TCPMessage>(this,"msgQueue",true,true);
+        ethQueue = new Queue<EthFrame>(this,"ethQueue",true,true);
+        ethLink = new Queue<EthFrame>(this,"ethLink",true,true);
+
         tcpMessageGeneratorTime= new ContDistUniform(this, "ServiceTimeStream", 5.0, 5.0, true, false);
+
 
 
     }
