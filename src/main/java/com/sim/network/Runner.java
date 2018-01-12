@@ -17,11 +17,11 @@ public class Runner {
 
         model.connectToExperiment(exp);
         exp.setShowProgressBar(false);
-        exp.stop(new TimeInstant(10, TimeUnit.MICROSECONDS));
+        exp.stop(new TimeInstant(11, TimeUnit.MICROSECONDS));
 
 
-        exp.tracePeriod(new TimeInstant(0), new TimeInstant(10,TimeUnit.MICROSECONDS));
-        exp.debugPeriod(new TimeInstant(0), new TimeInstant(10,TimeUnit.MICROSECONDS));
+        exp.tracePeriod(new TimeInstant(0), new TimeInstant(11,TimeUnit.MICROSECONDS));
+        exp.debugPeriod(new TimeInstant(0), new TimeInstant(11,TimeUnit.MICROSECONDS));
 
         exp.start();
         exp.report();

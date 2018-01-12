@@ -8,8 +8,13 @@ import java.util.concurrent.TimeUnit;
 
 public class TCPMessageGenerator extends ExternalEvent {
 
-    public TCPMessageGenerator(Model owner, String name, boolean showInTrace){
+    private EthAdapter ethAdapter;
+    private String destAddress;
+
+    public TCPMessageGenerator(Model owner, String name, boolean showInTrace, EthAdapter adapter, String destAddress){
         super(owner, name, showInTrace);
+        this.ethAdapter = adapter;
+        this.destAddress = destAddress;
     }
 
     @Override
@@ -17,10 +22,7 @@ public class TCPMessageGenerator extends ExternalEvent {
         NetworkModel model = (NetworkModel)getModel();
 
         TCPMessage msg = new TCPMessage(model,"TCP Message",true);
-        model.msgQueue.insert(msg);
-
-        TCPMessageQueueMonitor tcpmonitor = new TCPMessageQueueMonitor(model, "msg-converter",true);
-        tcpmonitor.schedule(msg, new TimeSpan(0, TimeUnit.MICROSECONDS));
+        ethAdapter.outMsgQueue.insert(msg);
 
 
         schedule(new TimeSpan(2, TimeUnit.MICROSECONDS));
