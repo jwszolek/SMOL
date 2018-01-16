@@ -24,7 +24,38 @@ mvn install:install-file -Dfile=libs/desmoj-2.5.1c-bin.jar
 mvn clean install
 ```
 
+
 ## First simulation
+
+SMOL code below describes a simple measurement network presented on the image below.
+
+```
+adapter "eth1", {
+    ip "1"
+    generator_connected "true"
+    dst "Server"
+}
+
+adapter "Server", {
+    ip "2"
+}
+
+converter "rs485", {
+    dst "Server"
+}
+
+sensor "temperature", {
+    connect "rs485"
+}
+
+draw "map", {
+    fullmap "true"
+}
+
+sim "run", {
+    stop "10s"
+}
+```
 
 
 
