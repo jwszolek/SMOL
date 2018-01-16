@@ -16,10 +16,11 @@ sensor "temperature", {
     connect "rs485"
 }
 
-draw "map", {
+map "draw", {
     fullmap "true"
 }
 
+/*
 sim "run", {
     stop "10s"
-}
+}*/

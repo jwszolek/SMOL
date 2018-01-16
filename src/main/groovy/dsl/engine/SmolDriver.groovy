@@ -1,19 +1,29 @@
 package main.groovy.dsl.engine
 
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.ImportCustomizer
+
 class SmolDriver {
 
     static void main(String[] args) {
-        def dslDef = new File('./src/main/groovy/dsl/engine/SmolEngine.groovy').text
-        def smolFile = new File('./src/main/resources/network.smol').text
 
-        def script = """
-            ${dslDef}
+        def smolFile = new File(args[0]).text
+        def importCustomizer = new ImportCustomizer()
+        importCustomizer.addImport( 'Root', 'main.groovy.dsl.engine.Root')
+        importCustomizer.addImport( 'SimDriver', 'main.groovy.dsl.engine.SimDriver')
+
+        def configuration = new CompilerConfiguration()
+        configuration.addCompilationCustomizers(importCustomizer)
+
+            def script = """
             def out = Root.create {
                 ${smolFile}
             }
-            print out
-        """
-        new GroovyShell().evaluate(script)
+            
+            SimDriver.run(out.toString())
+            """
+            new GroovyShell(configuration).evaluate(script)
+
     }
 
 }
