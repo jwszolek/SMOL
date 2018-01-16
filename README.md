@@ -31,8 +31,8 @@ SMOL code below describes a simple measurement network presented on the image be
 
 ```
 /*
- * Define a network adapter
- * Assign IP address
+ * Define a network adapter 
+ * Assign IP address and name
  * Set destination for TCP packages
  * Attach TCP packages generator   
  */
@@ -42,22 +42,40 @@ adapter "eth1", {
     dst "Server"
 }
 
+/*
+ * Define a network adapter
+ * Assign IP address and name
+ */
 adapter "Server", {
     ip "2"
 }
 
+/*
+ * Define rs485 converter
+ * Set destination IP or name
+ */
 converter "rs485", {
     dst "Server"
 }
 
+/*
+ * Temp sensor definition
+ * Connect sensor to rs485 bus
+ */
 sensor "temperature", {
     connect "rs485"
 }
 
+/*
+ * Run map function which draws a graph with all connections 
+ */ 
 draw "map", {
     fullmap "true"
 }
 
+/*
+ * Run simulation phase 
+ */
 sim "run", {
     stop "10s"
 }
