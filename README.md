@@ -27,7 +27,7 @@ mvn clean install
 
 ## First simulation
 
-### SMOL code below describes a simple measurement network presented on the image below. The list of all avaliable commends that you can use in SMOL programs can be found in here: <Link>
+SMOL code below describes a simple measurement network presented on the image below. The list of all avaliable commends that you can use in SMOL programs can be found in here: <Link>
   
 
 ```
@@ -82,22 +82,22 @@ sim "run", {
 }
 ```
 
-### Provide a SMOL script as a parameter:
+Provide a SMOL script as a parameter:
 
 ```
 java -jar target/smol-1.0-SNAPSHOT.jar network.smol
 ```
 
-### Expected results:
+Expected results:
 
 
 ## SMOL elements
 
-### Adapter
+* Adapter
 
-### Converter
+* Converter
 
-### Sensor
+* Sensor
 
 
 
