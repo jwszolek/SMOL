@@ -91,7 +91,7 @@ java -jar target/smol-1.0-SNAPSHOT.jar network.smol
 Expected results:
 
 
-## SMOL syntax elements {#smol-syntax-elements}
+## SMOL syntax elements{#smol-syntax-elements}
 
 * Adapter
 
