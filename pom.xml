@@ -52,6 +52,12 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
         </dependency>
+        <dependency>
+            <groupId>desmoj</groupId>
+            <artifactId>desmoj</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -109,7 +115,7 @@
                 <configuration>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>com.sample.groovy.Runner</mainClass>
+                            <mainClass>main.groovy.dsl.engine.SmolDriver</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>

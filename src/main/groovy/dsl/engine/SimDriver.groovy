@@ -13,7 +13,11 @@ class SimDriver {
     private static TimeUnit epsilon = TimeUnit.MICROSECONDS;
 
 
-    static void main(String[] args) {
+    static void run(String properties) {
+
+        println "Starting simulation module"
+        println properties
+
         NetworkModel model = new NetworkModel(null,"SMOL Simulation Engine",true,true);
         Experiment exp = new Experiment("SMOLSimulationExperiment", new SingleUnitTimeFormatter(referenceUnit, epsilon,6,false));
 

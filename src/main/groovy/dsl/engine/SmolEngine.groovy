@@ -155,29 +155,30 @@ class Root {
 }
 
 
-def lang = Root.create {
-        adapter "eth1", {
-            ip "1"
-            generator_connected "true"
-            dst "Server"
-        }
+//def lang = Root.create {
+//        adapter "eth1", {
+//            ip "1"
+//            generator_connected "true"
+//            dst "Server"
+//        }
+//
+//        //comment test
+//        adapter "Server", {
+//            ip "2"
+//        }
+//
+//        converter "rs485", {
+//            dst "Server"
+//        }
+//
+//        sensor "temperature", {
+//            connect "rs485"
+//        }
+//
+//        map "network-map", {
+//            fullmap "true"
+//        }
+//
+//}
 
-        adapter "Server", {
-            ip "2"
-        }
-
-        converter "rs485", {
-            dst "Server"
-        }
-
-        sensor "temperature", {
-            connect "rs485"
-        }
-
-        map "network-map", {
-            fullmap "true"
-        }
-
-}
-
-print lang
+//print lang
