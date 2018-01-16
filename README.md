@@ -30,6 +30,12 @@ mvn clean install
 SMOL code below describes a simple measurement network presented on the image below.
 
 ```
+/*
+ * Define a network adapter
+ * Assign IP address
+ * Set destination for TCP packages
+ * Attach TCP packages generator   
+ */
 adapter "eth1", {
     ip "1"
     generator_connected "true"
