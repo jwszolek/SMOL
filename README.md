@@ -27,7 +27,7 @@ mvn clean install
 
 ## First simulation
 
-SMOL code below describes a simple measurement network presented on the image below. The list of all available commands that you can use in the SMOL programs can be found in here: [SMOL Syntax](#SMOL-syntax-elements)
+SMOL code below describes a simple measurement network presented on the image below. The list of all available commands that you can use in the SMOL programs can be found in here: [SMOL Syntax](#smol-syntax-elements)
   
 
 ```
@@ -91,7 +91,7 @@ java -jar target/smol-1.0-SNAPSHOT.jar network.smol
 Expected results:
 
 
-## SMOL syntax elements
+## SMOL syntax elements {#smol-syntax-elements}
 
 * Adapter
 
