@@ -35,7 +35,7 @@ public class NetworkModel extends Model{
 
         EthAdapter adapter_2 = new EthAdapter(this, "eth-adapter",true, "2");
         adapter_2.schedule(new TimeSpan(0));
-        
+
         TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",true, adapter_1, "2");
         msgGenertor.schedule(new TimeSpan(0));
 
