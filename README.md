@@ -9,8 +9,8 @@ Network description language (SMOL), which has been designed to describe the nec
 
 
 ## Requirements
-* Java
-* Groovy
+* Java 1.7
+* Groovy 2.4.3
 
 ## Installation
 
@@ -18,7 +18,7 @@ Network description language (SMOL), which has been designed to describe the nec
 git clone https://github.com/jwszolek/smol.git
 cd ./smol
 
-mvn install:install-file -Dfile=libs/desmoj-2.5.1c-bin.jar
+mvn install:install-file -Dfile=libs/desmoj-2.5.1e-bin.jar
 -DgroupId=desmoj -DartifactId=desmoj -Dversion=2.5.1 -Dpackaging=jar   
 
 mvn clean install
@@ -27,7 +27,8 @@ mvn clean install
 
 ## First simulation
 
-SMOL code below describes a simple measurement network presented on the image below.
+# SMOL code below describes a simple measurement network presented on the image below. The list of all avaliable commends that you can use in SMOL programs can be found in here: <Link>
+  
 
 ```
 /*
@@ -81,8 +82,24 @@ sim "run", {
 }
 ```
 
+# Provide a SMOL script as a parameter:
+
+```
+java -jar target/smol-1.0-SNAPSHOT.jar network.smol
+```
+
+# Expected results:
+
+
+## SMOL elements
+
+# Adapter
+
+# Converter
+
+# Sensor
+
 
 
 ## TODO
 * Add support for MQTT 
-* Design API for communication with DESMO-J framework
