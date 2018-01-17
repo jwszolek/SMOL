@@ -27,7 +27,9 @@ mvn clean install
 
 ## First simulation
 
-SMOL code below describes a simple measurement network presented on the image below. The list of all available commands that you can use in the SMOL programs can be found in here: [SMOL Syntax](#smol-syntax-elements)
+SMOL code below describes a simple measurement network presented on the image below. The purpose of this task is to simulate network traffic in modeled network.
+ 
+ The list of all available commands that you can use in the SMOL programs can be found in here: [SMOL Syntax](#smol-syntax-elements)
   
 
 ```
@@ -82,7 +84,7 @@ sim "run", {
 }
 ```
 
-Provide a SMOL script as a parameter:
+To start the simulation provide a SMOL script as a parameter:
 
 ```
 java -jar target/smol-1.0-SNAPSHOT.jar network.smol
