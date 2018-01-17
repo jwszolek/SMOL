@@ -90,6 +90,14 @@ java -jar target/smol-1.0-SNAPSHOT.jar network.smol
 
 Expected results:
 
+* Graph that describes network connections and relations. In the Edit section, you can modify graph layout by selecting appropriate options.
+
+<p align="center">
+  <img src="readme-media/graph_example.png?raw=true" alt="graph_example"/>
+</p>
+
+
+
 
 ## SMOL syntax elements
 

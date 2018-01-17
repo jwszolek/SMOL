@@ -11,19 +11,19 @@ class SmolConfigurationDsl {
 
     SmolConfigurationDsl(SmolConfiguration item){
         this.configItem = item
-        configItem << "adapter"
+        configItem << "'type':'adapter'"
     }
 
     def ip(String ip){
-        configItem << ip
+        configItem << "'ip':'${ip}'"
     }
 
     def generator_connected(String generator){
-        configItem << generator
+        configItem << "'generator':'${generator}'"
     }
 
     def dst(String dst){
-        configItem << dst
+        configItem << "'dst':'${dst}'"
     }
 }
 
@@ -33,11 +33,11 @@ class ConverterConfigurationDsl {
 
     ConverterConfigurationDsl(SmolConfiguration item){
         this.configItem = item
-        configItem << "converter"
+        configItem << "'type':'converter'"
     }
 
-    def dst(String dst){
-        configItem << dst
+    def connect(String converter){
+        configItem << "'connect':'${converter}'"
     }
 }
 
@@ -46,11 +46,11 @@ class SensorConfigurationDsl {
 
     SensorConfigurationDsl(SmolConfiguration item){
         this.configItem = item
-        configItem << "sensor"
+        configItem << "'type':'sensor'"
     }
 
-    def connect(String dev){
-        configItem << dev
+    def connect(String connect){
+        configItem << "'connect':'${connect}'"
     }
 }
 
@@ -155,30 +155,86 @@ class Root {
 }
 
 
-//def lang = Root.create {
-//        adapter "eth1", {
-//            ip "1"
-//            generator_connected "true"
-//            dst "Server"
-//        }
-//
-//        //comment test
-//        adapter "Server", {
-//            ip "2"
-//        }
-//
-//        converter "rs485", {
-//            dst "Server"
-//        }
-//
-//        sensor "temperature", {
-//            connect "rs485"
-//        }
-//
-//        map "network-map", {
-//            fullmap "true"
-//        }
-//
-//}
+def network = Root.create {
+        adapter "eth1", {
+            ip "1"
+            generator_connected "true"
+            dst "Server"
+        }
 
-//print lang
+        //comment test
+        adapter "Server", {
+            ip "2"
+        }
+
+        adapter "eth3", {
+            ip "3"
+        }
+
+        adapter "eth4", {
+            ip "4"
+        }
+
+        converter "rs485", {
+            connect "eth4"
+        }
+
+        sensor "temperature1", {
+            connect "eth3"
+        }
+
+        sensor "temperature2", {
+            connect "rs485"
+        }
+
+        map "network-map", {
+            fullmap "true"
+        }
+
+}
+
+
+def testNetwork = Root.create {
+
+    /*
+ * Define a network adapter
+ * Assign IP address and name
+ * Set destination for TCP packages
+ * Attach TCP packages generator
+ */
+    adapter "eth1", {
+        ip "1"
+        generator_connected "true"
+        dst "Server"
+    }
+
+/*
+ * Define a network adapter
+ * Assign IP address and name
+ */
+    adapter "Server", {
+        ip "2"
+    }
+
+/*
+ * Define rs485 converter
+ * Set destination IP or name
+ */
+    converter "rs485", {
+        connect"Server"
+    }
+
+/*
+ * Temp sensor definition
+ * Connect sensor to rs485 bus
+ */
+    sensor "temperature", {
+        connect "rs485"
+    }
+
+}
+
+new GraphProducer().build(testNetwork)
+
+
+
