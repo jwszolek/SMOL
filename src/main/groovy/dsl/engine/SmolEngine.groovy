@@ -33,11 +33,11 @@ class ConverterConfigurationDsl {
 
     ConverterConfigurationDsl(SmolConfiguration item){
         this.configItem = item
-        configItem << "converter"
+        configItem << "'type':'converter'"
     }
 
-    def dst(String dst){
-        configItem << dst
+    def connect(String converter){
+        configItem << "'connect':'${converter}'"
     }
 }
 
@@ -46,11 +46,11 @@ class SensorConfigurationDsl {
 
     SensorConfigurationDsl(SmolConfiguration item){
         this.configItem = item
-        configItem << "sensor"
+        configItem << "'type':'sensor'"
     }
 
-    def connect(String dev){
-        configItem << dev
+    def connect(String connect){
+        configItem << "'connect':'${connect}'"
     }
 }
 
@@ -176,10 +176,14 @@ def network = Root.create {
         }
 
         converter "rs485", {
-            dst "Server"
+            connect "eth4"
         }
 
-        sensor "temperature", {
+        sensor "temperature1", {
+            connect "eth3"
+        }
+
+        sensor "temperature2", {
             connect "rs485"
         }
 
@@ -190,7 +194,47 @@ def network = Root.create {
 }
 
 
-new GraphProducer().build(network)
+def testNetwork = Root.create {
+
+    /*
+ * Define a network adapter
+ * Assign IP address and name
+ * Set destination for TCP packages
+ * Attach TCP packages generator
+ */
+    adapter "eth1", {
+        ip "1"
+        generator_connected "true"
+        dst "Server"
+    }
+
+/*
+ * Define a network adapter
+ * Assign IP address and name
+ */
+    adapter "Server", {
+        ip "2"
+    }
+
+/*
+ * Define rs485 converter
+ * Set destination IP or name
+ */
+    converter "rs485", {
+        connect"Server"
+    }
+
+/*
+ * Temp sensor definition
+ * Connect sensor to rs485 bus
+ */
+    sensor "temperature", {
+        connect "rs485"
+    }
+
+}
+
+new GraphProducer().build(testNetwork)
 
 
 
