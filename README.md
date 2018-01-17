@@ -115,8 +115,8 @@ Expected results:
 
 
 ## References
-* Z.Kowlczuk, J.Wszolek - nalysis Of Economical Lighting Of Highways In The Environment Of SMOL Language. Metrology and Measurement Systems, Polish Academy of Sciences. (2017)
+* Z.Kowalczuk, J.Wszolek - nalysis Of Economical Lighting Of Highways In The Environment Of SMOL Language. Metrology and Measurement Systems, Polish Academy of Sciences. (2017)
 
-* Z.Kowlczuk, J.Wszolek - Networked Object Monitor - a distributed system for monitoring, diagnostics and control of complex industrial facilities. Metrology And Measurement Systems, ISSN 0860-8229 (2012)
+* Z.Kowalczuk, J.Wszolek - Networked Object Monitor - a distributed system for monitoring, diagnostics and control of complex industrial facilities. Metrology And Measurement Systems, ISSN 0860-8229 (2012)
 
   
