@@ -14,11 +14,17 @@ public class EthLinkEvent extends Event<EthFrame> {
     public void eventRoutine(EthFrame ethFrame) {
         NetworkModel model = (NetworkModel) getModel();
 
+
+
         if(model.ethLink.isEmpty()){
             model.ethLink.insert(ethFrame);
-
+            sendTraceNote("DODAJE  = " + ethFrame.getName());
+            sendTraceNote("CZAS  = " + ethFrame.presentTime());
 
         }else{
+            sendTraceNote("LINIA ZAJETA = " + ethFrame.getName());
+            sendTraceNote("CZAS  = " + ethFrame.presentTime());
+
             //kolizja
         }
 

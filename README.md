@@ -11,6 +11,7 @@ Network description language (SMOL), which has been designed to describe the nec
 ## Requirements
 * Java 1.7
 * Groovy 2.4.3
+* R 3.4.2
 
 ## Installation
 
@@ -92,7 +93,7 @@ java -jar target/smol-1.0-SNAPSHOT.jar network.smol
 
 Expected results:
 
-* Graph that describes network connections and relations. In the Edit section, you can modify graph layout by selecting appropriate options.
+* Graph that describes network connections and relations. You can modify graph layout by selecting the appropriate options.
 
 <p align="center">
   <img src="readme-media/graph_example.png?raw=true" alt="graph_example"/>
@@ -117,7 +118,7 @@ Expected results:
 
 
 ## References
-* Z.Kowalczuk, J.Wszolek - nalysis Of Economical Lighting Of Highways In The Environment Of SMOL Language. Metrology and Measurement Systems, Polish Academy of Sciences. (2017)
+* Z.Kowalczuk, J.Wszolek - Analysis Of Economical Lighting Of Highways In The Environment Of SMOL Language. Metrology and Measurement Systems, Polish Academy of Sciences. (2017)
 
 * Z.Kowalczuk, J.Wszolek - Networked Object Monitor - a distributed system for monitoring, diagnostics and control of complex industrial facilities. Metrology And Measurement Systems, ISSN 0860-8229 (2012)
 
