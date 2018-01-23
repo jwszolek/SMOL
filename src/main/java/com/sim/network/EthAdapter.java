@@ -7,7 +7,9 @@ import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
 import desmoj.core.simulator.*;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class EthAdapter extends ExternalEvent {
 
@@ -19,13 +21,18 @@ public class EthAdapter extends ExternalEvent {
     public String getAdapterAddress() {
         return adapterAddress;
     }
-
-    public void setAdapterAddress(String adapterAddress) {
-        this.adapterAddress = adapterAddress;
-    }
-
     private String adapterAddress;
 
+    public boolean isCollisionDetected() {
+        return collisionDetected;
+    }
+
+    public void setCollisionDetected(boolean collisionDetected) {
+        this.collisionDetected = collisionDetected;
+    }
+
+    private boolean collisionDetected = false;
+    private boolean transmits = false;
 
 
     public EthAdapter(Model owner, String name, boolean showInTrace, String address) {
@@ -41,42 +48,61 @@ public class EthAdapter extends ExternalEvent {
     public void eventRoutine() {
         NetworkModel model = (NetworkModel) getModel();
 
-        if (!outMsgQueue.isEmpty()) {
+        if(!this.collisionDetected) {
+            if (!outMsgQueue.isEmpty()) {
 
-            TCPMessage tcpMessage = outMsgQueue.first();
-            outMsgQueue.remove(tcpMessage);
+                TCPMessage tcpMessage = outMsgQueue.first();
+                outMsgQueue.remove(tcpMessage);
 
-            EthFrame frame = new EthFrame(model, "ETH-Frame", true);
-            frame.setDestAddress("2");
+                EthAdapter adapter = null;
+                List<EthAdapter> adapterList = model.getEthAdapterList().stream().filter(x -> this.getName() == x.getName()).collect(Collectors.toList());
+                if (adapterList.size() == 1) {
+                    adapter = adapterList.get(0);
+                } else {
+                    sendTraceNote("illegal number of instance");
+                }
 
-            outAdapterQueue.insert(frame);
-        }
+                EthFrame frame = new EthFrame(model, "ETH-Frame", true, adapter, presentTime().toString());
+                frame.setDestAddress("2");
+
+                outAdapterQueue.insert(frame);
+            }
 
 
-        if(!outAdapterQueue.isEmpty()) {
+            if (!outAdapterQueue.isEmpty()) {
 
-            EthFrame frame = outAdapterQueue.first();
-            outAdapterQueue.remove(frame);
+                EthFrame frame = outAdapterQueue.first();
+                outAdapterQueue.remove(frame);
 
-            EthLinkEvent ethLink = new EthLinkEvent(model, "link-monitor", true);
-            ethLink.schedule(frame, new TimeSpan(0, TimeUnit.MICROSECONDS));
+//            EthLinkEvent ethLink = new EthLinkEvent(model, "link-monitor", true);
+//            ethLink.schedule(frame, new TimeSpan(0, TimeUnit.MICROSECONDS));
 
-            //model.ethLink.insert(adapterQueue.first());
+                model.ethPendingBuffer.insert(frame);
 
-            }else {
+                //model.ethLink.insert(adapterQueue.first());
+
+            } else {
                 //obsluga kolizji
             }
 
 
-        if(!inAdapterQueue.isEmpty()){
-            EthFrame inFrame = inAdapterQueue.first();
-            inAdapterQueue.remove(inFrame);
+            if (!inAdapterQueue.isEmpty()) {
+                EthFrame inFrame = inAdapterQueue.first();
+                inAdapterQueue.remove(inFrame);
 
-            TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
-            inMsgQueue.insert(inTCPMessage);
+                TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
+                inMsgQueue.insert(inTCPMessage);
+            }
+
+//        }
+
+//        if(this.collisionDetected){
+//            schedule(new TimeSpan(9, TimeUnit.MICROSECONDS));
+//        }else {
+//        if(!this.collisionDetected) {
         }
 
-
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
+
     }
 }
