@@ -35,6 +35,7 @@ public class EthAdapter extends ExternalEvent {
     private boolean transmits = false;
 
 
+
     public EthAdapter(Model owner, String name, boolean showInTrace, String address) {
         super(owner, name, showInTrace);
         inAdapterQueue = new Queue<EthFrame>(owner,"in-adapterQueue-"+address,true,true);
@@ -62,7 +63,7 @@ public class EthAdapter extends ExternalEvent {
                     sendTraceNote("illegal number of instance");
                 }
 
-                EthFrame frame = new EthFrame(model, "ETH-Frame", true, adapter, presentTime().toString());
+                EthFrame frame = new EthFrame(model, "ETH-Frame", true, adapter, presentTime());
                 frame.setDestAddress("2");
 
                 outAdapterQueue.insert(frame);
@@ -70,37 +71,21 @@ public class EthAdapter extends ExternalEvent {
 
 
             if (!outAdapterQueue.isEmpty()) {
-
                 EthFrame frame = outAdapterQueue.first();
                 outAdapterQueue.remove(frame);
-
-//            EthLinkEvent ethLink = new EthLinkEvent(model, "link-monitor", true);
-//            ethLink.schedule(frame, new TimeSpan(0, TimeUnit.MICROSECONDS));
-
                 model.ethPendingBuffer.insert(frame);
-
-                //model.ethLink.insert(adapterQueue.first());
-
-            } else {
-                //obsluga kolizji
             }
-
-
-            if (!inAdapterQueue.isEmpty()) {
-                EthFrame inFrame = inAdapterQueue.first();
-                inAdapterQueue.remove(inFrame);
-
-                TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
-                inMsgQueue.insert(inTCPMessage);
-            }
-
-//        }
-
-//        if(this.collisionDetected){
-//            schedule(new TimeSpan(9, TimeUnit.MICROSECONDS));
-//        }else {
-//        if(!this.collisionDetected) {
         }
+
+        if (!inAdapterQueue.isEmpty()) {
+            EthFrame inFrame = inAdapterQueue.first();
+            inAdapterQueue.remove(inFrame);
+            sendTraceNote("FRAME-STOP " + inFrame.getName());
+
+            TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
+            inMsgQueue.insert(inTCPMessage);
+        }
+
 
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
 

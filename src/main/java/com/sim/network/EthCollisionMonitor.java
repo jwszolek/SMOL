@@ -3,6 +3,7 @@ package main.java.com.sim.network;
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
+import desmoj.core.simulator.TimeInstant;
 import desmoj.core.simulator.TimeSpan;
 
 import java.util.List;
@@ -26,13 +27,33 @@ public class EthCollisionMonitor extends ExternalEvent {
 
             if(model.ethLink.isEmpty()){
                 model.ethPendingBuffer.remove(framePending);
+                framePending.setStartTransmission(presentTime());
                 model.ethLink.insert(framePending);
             }
 
             for(EthFrame frame: model.ethPendingBuffer){
 
-                if(!model.ethLink.isEmpty() && Objects.equals(model.ethLink.first().getInsertedTime(),frame.getInsertedTime())
+                //sendTraceNote("ethLink startTransmision = " + model.ethLink.first().getStartTransmission());
+                TimeInstant ethLinkFrame = null;
+
+                if(!model.ethLink.isEmpty()) {
+                    if (model.ethLink.first().getStartTransmission() != null) {
+                        ethLinkFrame = model.ethLink.first().getStartTransmission();
+                    } else {
+                        ethLinkFrame = model.ethLink.first().getInsertedTime();
+                    }
+                }
+
+                //sendTraceNote("ethLink startTransmision = " + ethLinkFrame);
+
+                if(!model.ethLink.isEmpty() && Objects.equals(ethLinkFrame,frame.getInsertedTime())
                         && !Objects.equals(model.ethLink.first().adapter.getName(), frame.adapter.getName())) {
+
+
+                    sendTraceNote("ethLink inserted time = " + model.ethLink.first().getInsertedTime());
+                    sendTraceNote("ethLink inserted time = " + model.ethLink.first());
+                    sendTraceNote("frame inserted time = " + frame.getInsertedTime());
+                    sendTraceNote("-----");
 
                     sendTraceNote("Collision detected= " + !model.ethLink.isEmpty());
                     sendTraceNote("Collision detected= " + model.ethLink.first().getInsertedTime());
@@ -66,7 +87,7 @@ public class EthCollisionMonitor extends ExternalEvent {
                     model.ethPendingBuffer.remove(frame);
                     double colAdapterWait = getCollisionWaitingTimeSlot();
                     ReleaseEthAdapterEvent rAdapterCol = new ReleaseEthAdapterEvent(model, "collision waiting", true, colAdapter);
-                    rAdapterCol.schedule(linkFrame, new TimeSpan(colAdapterWait, TimeUnit.MICROSECONDS));
+                    rAdapterCol.schedule(frame, new TimeSpan(colAdapterWait, TimeUnit.MICROSECONDS));
                     sendTraceNote("Collision waiting time slot = " + colAdapterWait + " adapter = " + colAdapter.getName());
 
                 }

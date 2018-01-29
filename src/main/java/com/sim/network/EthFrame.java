@@ -2,6 +2,7 @@ package main.java.com.sim.network;
 
 import desmoj.core.simulator.Entity;
 import desmoj.core.simulator.Model;
+import desmoj.core.simulator.TimeInstant;
 
 public class EthFrame extends Entity {
 
@@ -22,11 +23,21 @@ public class EthFrame extends Entity {
 
     public EthAdapter adapter;
 
+    public TimeInstant getStartTransmission() {
+        return startTransmission;
+    }
 
-    public String getInsertedTime() {
+    public void setStartTransmission(TimeInstant startTransmission) {
+        this.startTransmission = startTransmission;
+    }
+
+    private TimeInstant startTransmission;
+
+    public TimeInstant getInsertedTime() {
         return insertedTime;
     }
-    public String insertedTime;
+    public TimeInstant insertedTime;
+
 
     public int getRetriesCounter() {
         return retriesCounter;
@@ -49,7 +60,7 @@ public class EthFrame extends Entity {
     }
 
 
-    public EthFrame(Model owner, String name, boolean showInTrace, EthAdapter adapater, String insertedTime){
+    public EthFrame(Model owner, String name, boolean showInTrace, EthAdapter adapater, TimeInstant insertedTime){
         super(owner, name, showInTrace);
         this.insertedTime = insertedTime;
         this.adapter = adapater;

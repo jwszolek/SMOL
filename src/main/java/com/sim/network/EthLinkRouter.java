@@ -15,8 +15,12 @@ public class EthLinkRouter extends ExternalEvent {
     public void setInterframeGap(boolean interframeGap) {
         this.interframeGap = interframeGap;
     }
-
     private boolean interframeGap = false;
+
+    public void setFirstRun(boolean firstRun) {
+        this.firstRun = firstRun;
+    }
+    private boolean firstRun = true;
 
 
     public EthLinkRouter(Model owner, String name, boolean showInTrace, List<EthAdapter> adapters) {
@@ -31,18 +35,16 @@ public class EthLinkRouter extends ExternalEvent {
         if (!interframeGap) {
             if (!model.ethLink.isEmpty()) {
                 EthFrame frame = model.ethLink.first();
-                sendTraceNote("DEST ADDRESS = " + frame.getDestAddress());
+                sendTraceNote("FRAME-START " + frame.getName());
 
+                sendTraceNote("DEST ADDRESS = " + frame.getDestAddress());
                 EthAdapter adapter = getAdapterAddress(frame);
                 sendTraceNote("FOUND ADAPTER = " + adapter.getAdapterAddress());
-
-                if (adapter != null) {
-                    adapter.inAdapterQueue.insert(frame);
-                }
+                frame.setStartTransmission(presentTime());
 
                 //interfame gap -> for 10Mb = 9,6 microsec
-                ReleaseIFGEvent ifgEvent = new ReleaseIFGEvent(model, "release-IFG-model", true, this);
-                ifgEvent.schedule(frame, new TimeSpan(9.6, TimeUnit.MICROSECONDS));
+                ReleaseIFGEvent ifgEvent = new ReleaseIFGEvent(model, "release-IFG-model", true, this, adapter);
+                ifgEvent.schedule(frame, new TimeSpan(12144 + 9.6, TimeUnit.MICROSECONDS));
 
                 this.interframeGap = true;
             }

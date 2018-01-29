@@ -25,7 +25,7 @@ public class TCPMessageGenerator extends ExternalEvent {
         ethAdapter.outMsgQueue.insert(msg);
 
 
-        schedule(new TimeSpan(9.6, TimeUnit.MICROSECONDS));
+        schedule(new TimeSpan(1, TimeUnit.MILLISECONDS));
 
     }
 }

@@ -51,29 +51,29 @@ public class NetworkModel extends Model{
 
         EthAdapter adapter_2 = new EthAdapter(this, "eth-adapter",true, "2");
         adapter_2.schedule(new TimeSpan(0));
-
-        EthAdapter adapter_3 = new EthAdapter(this, "eth-adapter",true, "3");
-        adapter_3.schedule(new TimeSpan(0));
-
-        EthAdapter adapter_4 = new EthAdapter(this, "eth-adapter",true, "3");
-        adapter_4.schedule(new TimeSpan(0));
+//
+//        EthAdapter adapter_3 = new EthAdapter(this, "eth-adapter",true, "3");
+//        adapter_3.schedule(new TimeSpan(0));
+//
+//        EthAdapter adapter_4 = new EthAdapter(this, "eth-adapter",true, "4");
+//        adapter_4.schedule(new TimeSpan(0));
 
 
 
         TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",true, adapter_1, "2");
         msgGenertor.schedule(new TimeSpan(0));
 
-        TCPMessageGenerator msgGenertor3 = new TCPMessageGenerator(this, "msg-generator",true, adapter_3, "2");
-        msgGenertor3.schedule(new TimeSpan(0));
-
-        TCPMessageGenerator msgGenertor4 = new TCPMessageGenerator(this, "msg-generator",true, adapter_4, "2");
-        msgGenertor4.schedule(new TimeSpan(0));
+//        TCPMessageGenerator msgGenertor3 = new TCPMessageGenerator(this, "msg-generator",true, adapter_3, "2");
+//        msgGenertor3.schedule(new TimeSpan(0));
+////
+//        TCPMessageGenerator msgGenertor4 = new TCPMessageGenerator(this, "msg-generator",true, adapter_4, "2");
+//        msgGenertor4.schedule(new TimeSpan(0));
 
 
         ethAdapterList.add(adapter_1);
         ethAdapterList.add(adapter_2);
-        ethAdapterList.add(adapter_3);
-        ethAdapterList.add(adapter_4);
+//        ethAdapterList.add(adapter_3);
+//        ethAdapterList.add(adapter_4);
 
         EthLinkRouter router = new EthLinkRouter(this, "ethlink-router",true, ethAdapterList);
         router.schedule(new TimeSpan(0));

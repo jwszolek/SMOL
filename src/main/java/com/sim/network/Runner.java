@@ -25,11 +25,11 @@ public class Runner {
 
         model.connectToExperiment(exp);
         exp.setShowProgressBar(false);
-        exp.stop(new TimeInstant(4500, TimeUnit.MICROSECONDS));
+        exp.stop(new TimeInstant(100, TimeUnit.MILLISECONDS));
 
 
-        exp.tracePeriod(new TimeInstant(0), new TimeInstant(35,TimeUnit.MICROSECONDS));
-        exp.debugPeriod(new TimeInstant(0), new TimeInstant(35,TimeUnit.MICROSECONDS));
+        exp.tracePeriod(new TimeInstant(0), new TimeInstant(50,TimeUnit.MILLISECONDS));
+        exp.debugPeriod(new TimeInstant(0), new TimeInstant(50,TimeUnit.MILLISECONDS));
 
 //        LogsWritrer lw = new LogsWritrer();
 //
@@ -50,7 +50,11 @@ public class Runner {
 //        });
 
 
+        exp.setShowProgressBarAutoclose(true);
+        exp.setShowProgressBar(true);
         exp.start();
+
+
 
         exp.report();
 
