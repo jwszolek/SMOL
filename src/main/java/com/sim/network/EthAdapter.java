@@ -16,24 +16,21 @@ public class EthAdapter extends ExternalEvent {
     protected Queue<EthFrame> inAdapterQueue;
     protected Queue<EthFrame> outAdapterQueue;
     protected Queue<TCPMessage> inMsgQueue;
-    protected Queue<TCPMessage> outMsgQueue;
+    public Queue<TCPMessage> outMsgQueue;
+    private String adapterAddress;
+    private boolean collisionDetected = false;
+    private boolean transmits = false;
+
 
     public String getAdapterAddress() {
         return adapterAddress;
     }
-    private String adapterAddress;
-
     public boolean isCollisionDetected() {
         return collisionDetected;
     }
-
     public void setCollisionDetected(boolean collisionDetected) {
         this.collisionDetected = collisionDetected;
     }
-
-    private boolean collisionDetected = false;
-    private boolean transmits = false;
-
 
 
     public EthAdapter(Model owner, String name, boolean showInTrace, String address) {

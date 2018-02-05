@@ -10,11 +10,13 @@ public class TCPMessageGenerator extends ExternalEvent {
 
     private EthAdapter ethAdapter;
     private String destAddress;
+    private double scheduleValue;
 
-    public TCPMessageGenerator(Model owner, String name, boolean showInTrace, EthAdapter adapter, String destAddress){
+    public TCPMessageGenerator(Model owner, String name, boolean showInTrace, EthAdapter adapter, String destAddress, double scheduleValue){
         super(owner, name, showInTrace);
         this.ethAdapter = adapter;
         this.destAddress = destAddress;
+        this.scheduleValue = scheduleValue;
     }
 
     @Override
@@ -24,8 +26,8 @@ public class TCPMessageGenerator extends ExternalEvent {
         TCPMessage msg = new TCPMessage(model,"TCP Message",true);
         ethAdapter.outMsgQueue.insert(msg);
 
-
-        schedule(new TimeSpan(1, TimeUnit.MILLISECONDS));
+        //double randValue = model.getRandGeneratorValue();
+        schedule(new TimeSpan(this.scheduleValue, TimeUnit.MILLISECONDS));
 
     }
 }
