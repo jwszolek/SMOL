@@ -20,21 +20,22 @@ public class Runner {
 
     public static void main(String[] args) throws IOException {
 
-        NetworkModel model = new NetworkModel(null,"SMOL Simulation Engine",true,true);
+        NetworkModel model = new NetworkModel(null,"SMOL Simulation Engine",true,false);
         Experiment exp = new Experiment("SMOLSimulationExperiment", new SingleUnitTimeFormatter(referenceUnit, epsilon,6,false));
 
         model.connectToExperiment(exp);
         exp.setShowProgressBar(false);
-        exp.stop(new TimeInstant(4500, TimeUnit.MICROSECONDS));
+        exp.stop(new TimeInstant(10000, TimeUnit.MILLISECONDS));
 
 
-        exp.tracePeriod(new TimeInstant(0), new TimeInstant(35,TimeUnit.MICROSECONDS));
-        exp.debugPeriod(new TimeInstant(0), new TimeInstant(35,TimeUnit.MICROSECONDS));
+        exp.tracePeriod(new TimeInstant(0), new TimeInstant(10000,TimeUnit.MILLISECONDS));
+        exp.debugPeriod(new TimeInstant(0), new TimeInstant(10000,TimeUnit.MILLISECONDS));
 
-//        LogsWritrer lw = new LogsWritrer();
+        LogsWritrer lw = new LogsWritrer();
 //
+        exp.register(lw);
 //        exp.traceIsOn();
-//        //exp.addTraceReceiver(lw);
+        exp.addTraceReceiver(lw);
 //        exp.addTraceReceiver(new MessageReceiver() {
 //            @Override
 //            public void receive(Message message) {
@@ -50,12 +51,19 @@ public class Runner {
 //        });
 
 
+        exp.setShowProgressBarAutoclose(true);
+        exp.setShowProgressBar(true);
         exp.start();
+
+
 
         exp.report();
 
+        //lw.closeFile();
         exp.finish();
-
+        //lw.closeFile();
+        //exp.register()
+        //exp.deRegister(lw);
 
     }
 }

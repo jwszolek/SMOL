@@ -4,6 +4,9 @@ import desmoj.core.dist.ContDistUniform;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
 import desmoj.core.simulator.TimeSpan;
+import main.java.com.sim.network.rs232.RS232Converter;
+import main.java.com.sim.network.rs232.RS232Message;
+import main.java.com.sim.network.rs232.RS232MessageGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,13 @@ public class NetworkModel extends Model{
 
 
     private ContDistUniform randCollisionValue;
+
+    public double getRandGeneratorValue() {
+        return randGeneratorValue.sample();
+    }
+
+    private ContDistUniform randGeneratorValue;
+
     public int getAllColisionsCouter() {
         return allColisionsCouter;
     }
@@ -46,39 +56,56 @@ public class NetworkModel extends Model{
     @Override
     public void doInitialSchedules() {
 
-        EthAdapter adapter_1 = new EthAdapter(this, "eth-adapter",true, "1");
+        EthAdapter adapter_1 = new EthAdapter(this, "eth-adapter",false, "1");
         adapter_1.schedule(new TimeSpan(0));
 
-        EthAdapter adapter_2 = new EthAdapter(this, "eth-adapter",true, "2");
+        EthAdapter adapter_2 = new EthAdapter(this, "eth-adapter",false, "2");
         adapter_2.schedule(new TimeSpan(0));
-
-        EthAdapter adapter_3 = new EthAdapter(this, "eth-adapter",true, "3");
+//
+        EthAdapter adapter_3 = new EthAdapter(this, "eth-adapter",false, "3");
         adapter_3.schedule(new TimeSpan(0));
-
-        EthAdapter adapter_4 = new EthAdapter(this, "eth-adapter",true, "3");
+//
+        EthAdapter adapter_4 = new EthAdapter(this, "eth-adapter",false, "4");
         adapter_4.schedule(new TimeSpan(0));
+//
+//        EthAdapter adapter_5 = new EthAdapter(this, "eth-adapter",true, "4");
+//        adapter_5.schedule(new TimeSpan(0));
 
 
+        RS232Converter rs232Conv1 = new RS232Converter(this, "rs232-converter",false, adapter_1);
+        rs232Conv1.schedule();new TimeSpan(0);
 
-        TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",true, adapter_1, "2");
+
+        TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",false, adapter_1, "2", 50);
         msgGenertor.schedule(new TimeSpan(0));
 
-        TCPMessageGenerator msgGenertor3 = new TCPMessageGenerator(this, "msg-generator",true, adapter_3, "2");
+        TCPMessageGenerator msgGenertor3 = new TCPMessageGenerator(this, "msg-generator",false, adapter_3, "2", 90);
         msgGenertor3.schedule(new TimeSpan(0));
-
-        TCPMessageGenerator msgGenertor4 = new TCPMessageGenerator(this, "msg-generator",true, adapter_4, "2");
+////
+        TCPMessageGenerator msgGenertor4 = new TCPMessageGenerator(this, "msg-generator",false, adapter_4, "2", 14);
         msgGenertor4.schedule(new TimeSpan(0));
+
+
+        RS232MessageGenerator rs232MessageGenerator = new RS232MessageGenerator(this, "rs232-msg-generator", false, rs232Conv1);
+        rs232MessageGenerator.schedule(new TimeSpan(0));
+
+
+        //
+//        TCPMessageGenerator msgGenertor5 = new TCPMessageGenerator(this, "msg-generator",true, adapter_5, "2");
+//        msgGenertor5.schedule(new TimeSpan(0));
+
 
 
         ethAdapterList.add(adapter_1);
         ethAdapterList.add(adapter_2);
         ethAdapterList.add(adapter_3);
         ethAdapterList.add(adapter_4);
+//        ethAdapterList.add(adapter_5);
 
-        EthLinkRouter router = new EthLinkRouter(this, "ethlink-router",true, ethAdapterList);
+        EthLinkRouter router = new EthLinkRouter(this, "ethlink-router",false, ethAdapterList);
         router.schedule(new TimeSpan(0));
 
-        EthCollisionMonitor collisionMonitor = new EthCollisionMonitor(this, "collision-monitor",true, ethAdapterList);
+        EthCollisionMonitor collisionMonitor = new EthCollisionMonitor(this, "collision-monitor",false, ethAdapterList);
         collisionMonitor.schedule(new TimeSpan(0));
 
     }
@@ -89,6 +116,7 @@ public class NetworkModel extends Model{
         ethPendingBuffer = new Queue<EthFrame>(this,"ethLinkPending",true,true);
 
         randCollisionValue= new ContDistUniform(this, "RandCollisionValue", 0, 1, true, false);
+        randGeneratorValue= new ContDistUniform(this, "TCPMessageGeneratorValue", 800, 1100, true, false);
 
 
     }
