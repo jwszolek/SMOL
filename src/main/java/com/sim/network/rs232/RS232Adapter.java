@@ -27,6 +27,7 @@ public class RS232Adapter extends ExternalEvent {
 
         if(!inRS232AdapterQueue.isEmpty()){
             TCPMessage msg = inRS232AdapterQueue.first();
+            inRS232AdapterQueue.remove(msg);
             ethAdapter.outMsgQueue.insert(msg);
         }
 

@@ -23,10 +23,8 @@ public class RS232ConverterEvent extends Event<RS232Message> {
         this.receivedMsg = rs232Message;
 
         TCPMessage tcpMessage = new TCPMessage(model, "RS232 To TCP", true);
-        this.rs232Adapter.inRS232AdapterQueue.insert(tcpMessage);
-
-
+        if(this.rs232Adapter.inRS232AdapterQueue != null) {
+            this.rs232Adapter.inRS232AdapterQueue.insert(tcpMessage);
+        }
     }
-
-
 }
