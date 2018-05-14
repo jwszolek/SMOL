@@ -4,8 +4,7 @@ import desmoj.core.dist.ContDistUniform;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
 import desmoj.core.simulator.TimeSpan;
-import main.java.com.sim.network.rs232.RS232Converter;
-import main.java.com.sim.network.rs232.RS232Message;
+import main.java.com.sim.network.rs232.RS232Adapter;
 import main.java.com.sim.network.rs232.RS232MessageGenerator;
 
 import java.util.ArrayList;
@@ -72,8 +71,8 @@ public class NetworkModel extends Model{
 //        adapter_5.schedule(new TimeSpan(0));
 
 
-        RS232Converter rs232Conv1 = new RS232Converter(this, "rs232-converter",false, adapter_1);
-        rs232Conv1.schedule();new TimeSpan(0);
+        RS232Adapter rs232Conv1 = new RS232Adapter(this, "rs232-adapter",false, adapter_1);
+        rs232Conv1.schedule(new TimeSpan(0));
 
 
         TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",false, adapter_1, "2", 50);

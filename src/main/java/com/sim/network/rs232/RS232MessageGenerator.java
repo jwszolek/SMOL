@@ -10,11 +10,11 @@ import java.util.concurrent.TimeUnit;
 
 public class RS232MessageGenerator extends ExternalEvent {
 
-    private RS232Converter rs232Converter;
+    private RS232Adapter rs232Adapter;
 
-    public RS232MessageGenerator(Model owner, String name, boolean showInTrace, RS232Converter rsConverter) {
+    public RS232MessageGenerator(Model owner, String name, boolean showInTrace, RS232Adapter rsConverter) {
         super(owner, name, showInTrace);
-        this.rs232Converter = rsConverter;
+        this.rs232Adapter = rsConverter;
     }
 
     @Override
@@ -22,10 +22,10 @@ public class RS232MessageGenerator extends ExternalEvent {
         NetworkModel model = (NetworkModel)getModel();
         RS232Message msg = new RS232Message(model, "RS232 Message", true);
 
-        RS232ConverterEvent converter = new RS232ConverterEvent(model, "RS232 Converter Event", true, this.rs232Converter);
+        RS232ConverterEvent converter = new RS232ConverterEvent(model, "RS232 Converter Event", true, this.rs232Adapter);
         converter.schedule(msg, new TimeSpan(10, TimeUnit.MICROSECONDS));
 
-        schedule(new TimeSpan(20, TimeUnit.MILLISECONDS));
+        schedule(new TimeSpan(500, TimeUnit.MILLISECONDS));
 
     }
 }

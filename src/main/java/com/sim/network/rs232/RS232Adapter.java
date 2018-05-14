@@ -11,21 +11,22 @@ import main.java.com.sim.network.TCPMessage;
 
 import java.util.concurrent.TimeUnit;
 
-public class RS232Converter extends ExternalEvent {
+public class RS232Adapter extends ExternalEvent {
 
-    public Queue<TCPMessage> inRS232ConveterQueue;
+    public Queue<TCPMessage> inRS232AdapterQueue;
     private EthAdapter ethAdapter;
 
-    public RS232Converter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
+    public RS232Adapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
         super(owner, name, showInTrace);
         this.ethAdapter = ethAdapter;
+        this.inRS232AdapterQueue = new Queue<>(owner,"in-rs232-adapterQueue-",true,true);
     }
 
     @Override
     public void eventRoutine() throws SuspendExecution {
 
-        if(!inRS232ConveterQueue.isEmpty()){
-            TCPMessage msg = inRS232ConveterQueue.first();
+        if(!inRS232AdapterQueue.isEmpty()){
+            TCPMessage msg = inRS232AdapterQueue.first();
             ethAdapter.outMsgQueue.insert(msg);
         }
 
