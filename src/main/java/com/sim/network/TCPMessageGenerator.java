@@ -24,6 +24,9 @@ public class TCPMessageGenerator extends ExternalEvent {
         NetworkModel model = (NetworkModel)getModel();
 
         TCPMessage msg = new TCPMessage(model,"TCP Message",true);
+        msg.setSrcAddress(ethAdapter.getAdapterAddress());
+        msg.setDstAddress(destAddress);
+
         ethAdapter.outMsgQueue.insert(msg);
 
         //double randValue = model.getRandGeneratorValue();

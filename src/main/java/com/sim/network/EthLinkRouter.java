@@ -44,6 +44,7 @@ public class EthLinkRouter extends ExternalEvent {
 
                 //interfame gap -> for 10Mb = 9,6 microsec
                 ReleaseIFGEvent ifgEvent = new ReleaseIFGEvent(model, "release-IFG-model", true, this, adapter);
+                //Max Message size = 1518 B => 12144 b
                 ifgEvent.schedule(frame, new TimeSpan(12144 + 9.6, TimeUnit.MICROSECONDS));
 
                 this.interframeGap = true;

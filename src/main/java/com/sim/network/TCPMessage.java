@@ -2,19 +2,29 @@ package main.java.com.sim.network;
 
 import desmoj.core.simulator.Entity;
 import desmoj.core.simulator.Model;
+import desmoj.core.simulator.TimeInstant;
 
 public class TCPMessage extends Entity {
 
-    public String getData() {
-        return data;
+
+    private String dstAddress;
+    private String srcAddress;
+
+    public String getDstAddress() {
+        return dstAddress;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDstAddress(String dstAddress) {
+        this.dstAddress = dstAddress;
     }
 
-    private String data;
+    public String getSrcAddress() {
+        return srcAddress;
+    }
 
+    public void setSrcAddress(String srcAddress) {
+        this.srcAddress = srcAddress;
+    }
 
     public TCPMessage(Model owner, String name, boolean showInTrace){
         super(owner, name, showInTrace);

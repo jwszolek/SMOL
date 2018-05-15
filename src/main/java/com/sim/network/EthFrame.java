@@ -6,6 +6,7 @@ import desmoj.core.simulator.TimeInstant;
 
 public class EthFrame extends Entity {
 
+    //TODO: clean up this class
 
     public String getDestAddress() {
         return destAddress;
@@ -32,6 +33,21 @@ public class EthFrame extends Entity {
     }
 
     private TimeInstant startTransmission;
+    private TimeInstant stopTransmission;
+
+
+    public TimeInstant getTransmissionTime(){
+        return new TimeInstant(stopTransmission.getTimeAsDouble() - startTransmission.getTimeAsDouble());
+    }
+
+    public TimeInstant getStopTransmission() {
+        return stopTransmission;
+    }
+
+    public void setStopTransmission(TimeInstant stopTransmission) {
+        this.stopTransmission = stopTransmission;
+    }
+
 
     public TimeInstant getInsertedTime() {
         return insertedTime;
@@ -65,7 +81,6 @@ public class EthFrame extends Entity {
         this.insertedTime = insertedTime;
         this.adapter = adapater;
     }
-
 
 
 }
