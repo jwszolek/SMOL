@@ -83,7 +83,7 @@ public class EthAdapter extends ExternalEvent {
             sendTraceNote("FRAME-STOP " + inFrame.getName());
             inFrame.getTcpMessage().setStopTransmission(presentTime());
 
-            sendTraceNote("TCPMSG-LEFT-TIME-"+inFrame.getTcpMessage().getTransmissionTime().toString()+"-"+inFrame.adapter.getName());
+            sendTraceNote("TCPMSG-LEFT-TIME|"+inFrame.getTcpMessage().getTransmissionTime().toString()+"|"+inFrame.adapter.getName());
 
             TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
             inMsgQueue.insert(inTCPMessage);
