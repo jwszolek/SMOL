@@ -40,7 +40,7 @@ public class EthLinkRouter extends ExternalEvent {
                 sendTraceNote("DEST ADDRESS = " + frame.getDestAddress());
                 EthAdapter adapter = getAdapterAddress(frame);
                 sendTraceNote("FOUND ADAPTER = " + adapter.getAdapterAddress());
-                frame.setStartTransmission(presentTime());
+
 
                 //interfame gap -> for 10Mb = 9,6 microsec
                 ReleaseIFGEvent ifgEvent = new ReleaseIFGEvent(model, "release-IFG-model", true, this, adapter);

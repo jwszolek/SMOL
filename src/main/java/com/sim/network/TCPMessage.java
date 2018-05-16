@@ -6,9 +6,18 @@ import desmoj.core.simulator.TimeInstant;
 
 public class TCPMessage extends Entity {
 
-
     private String dstAddress;
     private String srcAddress;
+    private TimeInstant startTransmission;
+    private TimeInstant stopTransmission;
+
+    public TimeInstant getTransmissionTime(){
+        return new TimeInstant(stopTransmission.getTimeAsDouble() - startTransmission.getTimeAsDouble());
+    }
+
+    public void setStopTransmission(TimeInstant stopTransmission) {
+        this.stopTransmission = stopTransmission;
+    }
 
     public String getDstAddress() {
         return dstAddress;
@@ -28,6 +37,7 @@ public class TCPMessage extends Entity {
 
     public TCPMessage(Model owner, String name, boolean showInTrace){
         super(owner, name, showInTrace);
+        startTransmission = presentTime();
     }
 
 }
