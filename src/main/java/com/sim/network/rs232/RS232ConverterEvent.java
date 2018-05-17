@@ -3,19 +3,18 @@ package main.java.com.sim.network.rs232;
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Event;
 import desmoj.core.simulator.Model;
-import main.java.com.sim.network.EthFrame;
 import main.java.com.sim.network.NetworkModel;
 import main.java.com.sim.network.TCPMessage;
 
 public class RS232ConverterEvent extends Event<RS232Message> {
 
     private RS232Message receivedMsg;
-    private RS232Converter rs232Converter;
+    private RS232Adapter rs232Adapter;
 
 
-    public RS232ConverterEvent(Model owner, String name, boolean showInTrace, RS232Converter rs232Converter) {
+    public RS232ConverterEvent(Model owner, String name, boolean showInTrace, RS232Adapter rs232Adapter) {
         super(owner, name, showInTrace);
-        this.rs232Converter = rs232Converter;
+        this.rs232Adapter = rs232Adapter;
     }
 
     @Override
@@ -24,10 +23,8 @@ public class RS232ConverterEvent extends Event<RS232Message> {
         this.receivedMsg = rs232Message;
 
         TCPMessage tcpMessage = new TCPMessage(model, "RS232 To TCP", true);
-        this.rs232Converter.inRS232ConveterQueue.insert(tcpMessage);
-
-
+        if(this.rs232Adapter.inRS232AdapterQueue != null) {
+            this.rs232Adapter.inRS232AdapterQueue.insert(tcpMessage);
+        }
     }
-
-
 }

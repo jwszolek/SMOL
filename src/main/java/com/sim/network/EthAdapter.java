@@ -61,7 +61,10 @@ public class EthAdapter extends ExternalEvent {
                 }
 
                 EthFrame frame = new EthFrame(model, "ETH-Frame", true, adapter, presentTime());
+                //TODO: remove hardcoded address
+
                 frame.setDestAddress("2");
+                frame.setTcpMessage(tcpMessage);
 
                 outAdapterQueue.insert(frame);
             }
@@ -78,6 +81,9 @@ public class EthAdapter extends ExternalEvent {
             EthFrame inFrame = inAdapterQueue.first();
             inAdapterQueue.remove(inFrame);
             sendTraceNote("FRAME-STOP " + inFrame.getName());
+            inFrame.getTcpMessage().setStopTransmission(presentTime());
+
+            sendTraceNote("TCPMSG-LEFT-TIME|"+inFrame.getTcpMessage().getTransmissionTime().toString()+"|"+inFrame.adapter.getName());
 
             TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
             inMsgQueue.insert(inTCPMessage);

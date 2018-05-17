@@ -67,6 +67,23 @@ class MapConfigurationDsl {
     }
 }
 
+class ActionConfigurationDsl {
+    private final SmolConfiguration configItem
+
+    ActionConfigurationDsl(SmolConfiguration item){
+        this.configItem = item
+        configItem << "'type':'action'"
+    }
+
+    def fullmap(String dev){
+        configItem << "'fullmap':'${dev}'"
+    }
+
+    def stop(String dev){
+        configItem << "'stop':'${dev}'"
+    }
+}
+
 
 class RootConfiguration {
     final Map<String, SmolConfiguration> catalog = [:]
@@ -138,6 +155,21 @@ class RootConfigurationDsl {
         script()
         return smol
     }
+
+    SmolConfiguration action(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ActionConfigurationDsl) Closure script){
+        def smol = rootConfig.catalog[name]
+
+        if(smol == null) {
+            smol = rootConfig.catalog[name] = new SmolConfiguration()
+        }
+
+        script.resolveStrategy = Closure.DELEGATE_FIRST
+        script.delegate = new ActionConfigurationDsl(smol)
+        script()
+        return smol
+    }
+
+
 
 
 }
@@ -232,9 +264,19 @@ def testNetwork = Root.create {
         connect "rs485"
     }
 
+    action "draw", {
+        fullmap "true"
+    }
+
+    action "sim", {
+        stop "1s"
+    }
+
 }
 
-new GraphProducer().build(testNetwork)
+
+
+//new GraphProducer().build(testNetwork)
 
 
 

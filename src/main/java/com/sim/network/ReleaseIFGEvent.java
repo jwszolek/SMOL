@@ -25,6 +25,7 @@ public class ReleaseIFGEvent extends Event<EthFrame> {
         model.ethLink.remove(ethFrame);
 
         sendTraceNote("ETHLINK-LEFT-"+ethFrame.adapter.getName());
+        ethFrame.setStopTransmission(presentTime());
 
         if (this.ethAdapter != null) {
             this.ethAdapter.inAdapterQueue.insert(ethFrame);

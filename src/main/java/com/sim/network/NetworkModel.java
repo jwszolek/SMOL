@@ -4,8 +4,7 @@ import desmoj.core.dist.ContDistUniform;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
 import desmoj.core.simulator.TimeSpan;
-import main.java.com.sim.network.rs232.RS232Converter;
-import main.java.com.sim.network.rs232.RS232Message;
+import main.java.com.sim.network.rs232.RS232Adapter;
 import main.java.com.sim.network.rs232.RS232MessageGenerator;
 
 import java.util.ArrayList;
@@ -59,38 +58,37 @@ public class NetworkModel extends Model{
         EthAdapter adapter_1 = new EthAdapter(this, "eth-adapter",false, "1");
         adapter_1.schedule(new TimeSpan(0));
 
-        EthAdapter adapter_2 = new EthAdapter(this, "eth-adapter",false, "2");
+        EthAdapter adapter_2 = new EthAdapter(this, "eth-adapter",true, "2");
         adapter_2.schedule(new TimeSpan(0));
-//
-        EthAdapter adapter_3 = new EthAdapter(this, "eth-adapter",false, "3");
-        adapter_3.schedule(new TimeSpan(0));
-//
-        EthAdapter adapter_4 = new EthAdapter(this, "eth-adapter",false, "4");
-        adapter_4.schedule(new TimeSpan(0));
+
+//        EthAdapter adapter_3 = new EthAdapter(this, "eth-adapter",false, "3");
+//        adapter_3.schedule(new TimeSpan(0));
+////
+//        EthAdapter adapter_4 = new EthAdapter(this, "eth-adapter",false, "4");
+//        adapter_4.schedule(new TimeSpan(0));
 //
 //        EthAdapter adapter_5 = new EthAdapter(this, "eth-adapter",true, "4");
 //        adapter_5.schedule(new TimeSpan(0));
 
 
-        RS232Converter rs232Conv1 = new RS232Converter(this, "rs232-converter",false, adapter_1);
-        rs232Conv1.schedule();new TimeSpan(0);
+//        RS232Adapter rs232Conv1 = new RS232Adapter(this, "rs232-adapter",false, adapter_1);
+//        rs232Conv1.schedule(new TimeSpan(0));
 
 
-        TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",false, adapter_1, "2", 50);
+        TCPMessageGenerator msgGenertor = new TCPMessageGenerator(this, "msg-generator",false, adapter_1, "2", 10);
         msgGenertor.schedule(new TimeSpan(0));
 
-        TCPMessageGenerator msgGenertor3 = new TCPMessageGenerator(this, "msg-generator",false, adapter_3, "2", 90);
-        msgGenertor3.schedule(new TimeSpan(0));
-////
-        TCPMessageGenerator msgGenertor4 = new TCPMessageGenerator(this, "msg-generator",false, adapter_4, "2", 14);
-        msgGenertor4.schedule(new TimeSpan(0));
+//        TCPMessageGenerator msgGenertor3 = new TCPMessageGenerator(this, "msg-generator",false, adapter_3, "2", 50);
+//        msgGenertor3.schedule(new TimeSpan(0));
+//
+//        TCPMessageGenerator msgGenertor4 = new TCPMessageGenerator(this, "msg-generator",false, adapter_4, "2", 50);
+//        msgGenertor4.schedule(new TimeSpan(0));
 
 
-        RS232MessageGenerator rs232MessageGenerator = new RS232MessageGenerator(this, "rs232-msg-generator", false, rs232Conv1);
-        rs232MessageGenerator.schedule(new TimeSpan(0));
+//        RS232MessageGenerator rs232MessageGenerator = new RS232MessageGenerator(this, "rs232-msg-generator", true, rs232Conv1);
+//        rs232MessageGenerator.schedule(new TimeSpan(0));
 
 
-        //
 //        TCPMessageGenerator msgGenertor5 = new TCPMessageGenerator(this, "msg-generator",true, adapter_5, "2");
 //        msgGenertor5.schedule(new TimeSpan(0));
 
@@ -98,8 +96,8 @@ public class NetworkModel extends Model{
 
         ethAdapterList.add(adapter_1);
         ethAdapterList.add(adapter_2);
-        ethAdapterList.add(adapter_3);
-        ethAdapterList.add(adapter_4);
+//        ethAdapterList.add(adapter_3);
+//        ethAdapterList.add(adapter_4);
 //        ethAdapterList.add(adapter_5);
 
         EthLinkRouter router = new EthLinkRouter(this, "ethlink-router",false, ethAdapterList);
