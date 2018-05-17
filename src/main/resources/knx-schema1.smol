@@ -1,0 +1,31 @@
+
+
+adapter "eth1", {
+        ip "1"
+}
+
+
+converter "rs485", {
+    connect "eth1"
+}
+
+
+sensor "temperature1", {
+    connect "rs485"
+}
+
+sensor "temperature2", {
+    connect "rs485"
+}
+
+sensor "temperature3", {
+    connect "rs485"
+}
+
+action "draw", {
+    fullmap "true"
+}
+
+/*action "sim", {
+    stop "1s"
+}*/
