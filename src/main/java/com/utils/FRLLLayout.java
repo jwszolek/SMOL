@@ -282,8 +282,7 @@ public class FRLLLayout<V, E> extends AbstractLayout<V, E> implements
 		double dx = 0;
 		double linkLength = this.getLinkLength((NodeBase)v1, (NodeBase)v2);
 		double lengthFactor = this.minMaxNor(linkLength);
-		
-		System.out.println("Liczymy ===========");
+
 		
 		System.out.println(lengthFactor);
 		System.out.println(((NodeBase)v2).getName());

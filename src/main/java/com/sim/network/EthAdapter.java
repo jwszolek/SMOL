@@ -61,9 +61,8 @@ public class EthAdapter extends ExternalEvent {
                 }
 
                 EthFrame frame = new EthFrame(model, "ETH-Frame", true, adapter, presentTime());
-                //TODO: remove hardcoded address
 
-                frame.setDestAddress("2");
+                frame.setDestAddress(tcpMessage.getDstAddress());
                 frame.setTcpMessage(tcpMessage);
 
                 outAdapterQueue.insert(frame);

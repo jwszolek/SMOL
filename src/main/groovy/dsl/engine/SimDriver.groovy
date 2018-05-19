@@ -3,6 +3,7 @@ package main.groovy.dsl.engine
 import desmoj.core.simulator.Experiment
 import desmoj.core.simulator.SingleUnitTimeFormatter
 import desmoj.core.simulator.TimeInstant
+import main.groovy.smoh.HBase
 import main.java.com.sim.network.LogsWritrer
 import main.java.com.sim.network.NetworkModel
 
@@ -14,20 +15,22 @@ class SimDriver {
     private static TimeUnit epsilon = TimeUnit.MICROSECONDS;
 
 
-    static void run(String properties) {
+    static void run(def properties) {
 
         println "Starting simulation module"
         println properties
 
-        NetworkModel model = new NetworkModel(null,"SMOL Simulation Engine",true,true);
-        Experiment exp = new Experiment("SMOLSimulationExperiment", new SingleUnitTimeFormatter(referenceUnit, epsilon,6,false));
+        def varList = new GraphProducer().formatInput(properties)
+
+        NetworkModel model = new NetworkModel(null,"SMOL Simulation Engine",true,true, varList)
+        Experiment exp = new Experiment("SMOLSimulationExperiment", new SingleUnitTimeFormatter(referenceUnit, epsilon,6,false))
 
         model.connectToExperiment(exp)
-        exp.stop(new TimeInstant(11, TimeUnit.MICROSECONDS))
+        exp.stop(new TimeInstant(10000, TimeUnit.MILLISECONDS));
 
 
-        exp.tracePeriod(new TimeInstant(0), new TimeInstant(11,TimeUnit.MICROSECONDS))
-        exp.debugPeriod(new TimeInstant(0), new TimeInstant(11,TimeUnit.MICROSECONDS))
+        exp.tracePeriod(new TimeInstant(0), new TimeInstant(10000,TimeUnit.MILLISECONDS));
+        exp.debugPeriod(new TimeInstant(0), new TimeInstant(10000,TimeUnit.MILLISECONDS));
 
 
         LogsWritrer lw = new LogsWritrer()

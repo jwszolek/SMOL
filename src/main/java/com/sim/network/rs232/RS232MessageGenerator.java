@@ -27,6 +27,6 @@ public class RS232MessageGenerator extends ExternalEvent {
         converter.schedule(msg, new TimeSpan(10, TimeUnit.MICROSECONDS));
 
 
-        schedule(new TimeSpan(500, TimeUnit.MILLISECONDS));
+        schedule(new TimeSpan(100, TimeUnit.MILLISECONDS));
     }
 }

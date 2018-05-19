@@ -14,12 +14,14 @@ import java.util.concurrent.TimeUnit;
 public class RS232Adapter extends ExternalEvent {
 
     public Queue<TCPMessage> inRS232AdapterQueue;
+    public Queue<TCPMessage> outRS232AdapterQueue;
     private EthAdapter ethAdapter;
 
     public RS232Adapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
         super(owner, name, showInTrace);
         this.ethAdapter = ethAdapter;
         this.inRS232AdapterQueue = new Queue<>(owner,"in-rs232-adapterQueue-",true,true);
+        this.outRS232AdapterQueue = new Queue<>(owner,"out-rs232-adapterQueue-",true,true);
     }
 
     @Override
