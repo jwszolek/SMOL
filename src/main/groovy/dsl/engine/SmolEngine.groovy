@@ -28,6 +28,28 @@ class SmolConfigurationDsl {
 }
 
 
+class TransferringConfigurationDsl {
+    private final SmolConfiguration configItem
+
+    TransferringConfigurationDsl(SmolConfiguration item){
+        this.configItem = item
+        configItem << "'type':'adapter'"
+    }
+
+    def ip(String ip){
+        configItem << "'ip':'${ip}'"
+    }
+
+    def generator_connected(String generator){
+        configItem << "'generator':'${generator}'"
+    }
+
+    def dst(String dst){
+        configItem << "'dst':'${dst}'"
+    }
+}
+
+
 class ConverterConfigurationDsl {
     private final SmolConfiguration configItem
 
@@ -51,6 +73,14 @@ class SensorConfigurationDsl {
 
     def connect(String connect){
         configItem << "'connect':'${connect}'"
+    }
+
+    def destAddress(String destAddress){
+        configItem << "'destAddress':'${destAddress}'"
+    }
+
+    def freq(String freq){
+        configItem << "'freq':'${freq}'"
     }
 }
 
@@ -103,6 +133,52 @@ class RootConfigurationDsl {
     def getSim(){
 
     }
+
+    //BEGIN of new naming convention
+
+    SmolConfiguration tn(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = TransferringConfigurationDsl) Closure script){
+        def smol = rootConfig.catalog[name]
+
+        if(smol == null) {
+            smol = rootConfig.catalog[name] = new SmolConfiguration()
+        }
+
+        script.resolveStrategy = Closure.DELEGATE_FIRST
+        script.delegate = new TransferringConfigurationDsl(smol)
+        script()
+        return smol
+    }
+
+    SmolConfiguration expander(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ConverterConfigurationDsl) Closure script){
+        def smol = rootConfig.catalog[name]
+
+        if(smol == null) {
+            smol = rootConfig.catalog[name] = new SmolConfiguration()
+        }
+
+        script.resolveStrategy = Closure.DELEGATE_FIRST
+        script.delegate = new ConverterConfigurationDsl(smol)
+        script()
+        return smol
+    }
+
+
+    SmolConfiguration san(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SensorConfigurationDsl) Closure script){
+        def smol = rootConfig.catalog[name]
+
+        if(smol == null) {
+            smol = rootConfig.catalog[name] = new SmolConfiguration()
+        }
+
+        script.resolveStrategy = Closure.DELEGATE_FIRST
+        script.delegate = new SensorConfigurationDsl(smol)
+        script()
+        return smol
+    }
+
+
+    //END of  new naming convention
+
 
     SmolConfiguration adapter(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SmolConfigurationDsl) Closure script){
         def smol = rootConfig.catalog[name]
@@ -262,6 +338,7 @@ def testNetwork = Root.create {
  */
     sensor "temperature", {
         connect "rs485"
+        destAddress "Server"
     }
 
     action "draw", {

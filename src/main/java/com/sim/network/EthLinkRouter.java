@@ -58,7 +58,7 @@ public class EthLinkRouter extends ExternalEvent {
     private EthAdapter getAdapterAddress(EthFrame frame) {
 
         for(EthAdapter adapter: adapters){
-            if(adapter.getAdapterAddress() == frame.getDestAddress()){
+            if(adapter.getAdapterAddress().equals(frame.getDestAddress())){
                 return adapter;
             }
         }

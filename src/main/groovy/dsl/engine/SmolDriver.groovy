@@ -69,26 +69,10 @@ class SmolDriver {
                 ${smolFile}
             }
 
-            SimDriver.run(out.toString())
+            SimDriver.run(out)
             """
             new GroovyShell(configuration).evaluate(simScript)
         }
-
-
-
-                //println out
-
-
-
-
-//            def script = """
-//            def out = Root.create {
-//                ${smolFile}
-//            }
-//
-//            SimDriver.run(out.toString())
-//            """
-//            new GroovyShell(configuration).evaluate(script)
 
     }
 

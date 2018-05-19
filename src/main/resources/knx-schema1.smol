@@ -22,6 +22,26 @@ sensor "temperature3", {
     connect "rs485"
 }
 
+sensor "humidity1", {
+    connect "rs485"
+}
+
+sensor "humidity2", {
+    connect "rs485"
+}
+
+sensor "alarm-module", {
+    connect "rs485"
+}
+
+sensor "hvac-control-module", {
+    connect "rs485"
+}
+
+sensor "dashboard", {
+    connect "rs485"
+}
+
 action "draw", {
     fullmap "true"
 }

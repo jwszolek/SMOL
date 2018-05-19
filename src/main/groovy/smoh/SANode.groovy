@@ -3,13 +3,16 @@ package main.groovy.smoh
 import main.java.com.utils.NodeType;
 
 class SANode extends HBase {
-	
+
+	public String destAddress
+	public double freq
+
 	public SANode(String caption)
 	{
 		super(caption);
 		this.type = NodeType.SA;
 	}
-	
+
 	public <T> void connect(T obj, Integer connectionspeed, SpeedUnit speedunt, Integer linkLgth)
 	{
 		connected = obj.caption;
@@ -17,5 +20,5 @@ class SANode extends HBase {
 		speedUnit = speedunt;
 		linkLength = linkLgth;
 	}
-		
+
 }
