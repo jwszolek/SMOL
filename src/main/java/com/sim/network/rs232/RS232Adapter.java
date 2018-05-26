@@ -6,7 +6,6 @@ import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
 import desmoj.core.simulator.TimeSpan;
 import main.java.com.sim.network.EthAdapter;
-import main.java.com.sim.network.EthFrame;
 import main.java.com.sim.network.TCPMessage;
 
 import java.util.concurrent.TimeUnit;
@@ -30,9 +29,13 @@ public class RS232Adapter extends ExternalEvent {
         if(!inRS232AdapterQueue.isEmpty()){
             TCPMessage msg = inRS232AdapterQueue.first();
             inRS232AdapterQueue.remove(msg);
-            ethAdapter.outMsgQueue.insert(msg);
+            getEthAdapter().outMsgQueue.insert(msg);
         }
 
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
+    }
+
+    public EthAdapter getEthAdapter() {
+        return ethAdapter;
     }
 }

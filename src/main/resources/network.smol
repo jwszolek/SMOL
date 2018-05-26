@@ -1,11 +1,12 @@
+adapter "Server", {
+    ip "2"
+
+}
+
 adapter "eth1", {
     ip "1"
     generator_connected "true"
     dst "Server"
-}
-
-adapter "Server", {
-    ip "2"
 }
 
 converter "rs485", {
