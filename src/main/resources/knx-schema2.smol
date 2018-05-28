@@ -12,12 +12,6 @@ tn "eth3", {
 }
 
 
-san "temp-sensor-1", {
-    connect "eth1"
-    destAddress "2"
-    freq "50"
-}
-
 san "temp-sensor-2", {
     connect "eth3"
     destAddress "2"
@@ -38,105 +32,48 @@ san "temp-sensor-4", {
 }
 
 
-/*expander "rs485", {
+expander "rs485", {
     connect "eth1"
 }
 
-expander "rs485-2", {
-    connect "eth3"
-}
 
-
-san "temp-sensor-1", {
+san "temp-sensor-rs485-1", {
     connect "rs485"
     destAddress "2"
+    freq "55"
 }
 
-san "temp-sensor-2", {
+san "temp-sensor-rs485-2", {
     connect "rs485"
     destAddress "2"
+    freq "56"
 }
 
-san "temp-sensor-3", {
-    connect "rs485-2"
+san "temp-sensor-rs485-3", {
+    connect "rs485"
     destAddress "2"
-}*/
+    freq "57"
+}
 
-/*san "temp-sensor-4", {
-    connect "rs485-2"
+san "temp-sensor-rs485-4", {
+    connect "rs485"
     destAddress "2"
-}*/
+    freq "58"
+}
+
+san "temp-sensor-rs485-5", {
+    connect "rs485"
+    destAddress "2"
+    freq "59"
+}
 
 
 action "draw", {
     fullmap "true"
 }
 
-
+// stop after 1 sek
 action "sim", {
-    stop "1s"
+    stop "20000"
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-adapter "eth1", {
-        ip "1"
-}
-
-adapter "eth2", {
-        ip "2"
-}
-
-
-converter "rs485", {
-    connect "eth1"
-}
-
-converter "rs485-2", {
-    connect "eth2"
-}
-
-
-sensor "temperature1", {
-    connect "rs485"
-}
-
-sensor "temperature2", {
-    connect "rs485"
-}
-
-sensor "temperature3", {
-    connect "rs485-2"
-}
-
-sensor "humidity1", {
-    connect "rs485"
-}
-
-sensor "humidity2", {
-    connect "rs485"
-}
-
-sensor "alarm-module", {
-    connect "rs485-2"
-}
-
-sensor "hvac-control-module", {
-    connect "rs485-2"
-}
-
-sensor "dashboard", {
-    connect "rs485"
-} */
 

@@ -162,7 +162,7 @@ public class NetworkModel extends Model{
                 //TODO: it needs to be more genetic - we should support different types, not only RS232Adapter
                 if(!converterInfo.isEmpty()){
                     RS232MessageGenerator rs232MessageGenerator = new RS232MessageGenerator(this, name, true,
-                            converterInfo.values().stream().findFirst().get());
+                            converterInfo.values().stream().findFirst().get(),sensorObj.destAddress, sensorObj.freq);
                     rs232MessageGenerator.schedule(new TimeSpan(0));
                 }
             }

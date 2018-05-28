@@ -49,6 +49,32 @@ class GraphProducer {
     }
 
 
+    def parseSimObject(def input) {
+
+        def simItems = [:]
+
+        input.catalog.each { k, v ->
+            if (v.toString().contains("'type':'action'")) {
+
+                def rawAdapter = v.toString().replace("[", "{").replace("]", "}").replace("\'", "\"")
+                def valueMap = new JsonSlurper().parseText(rawAdapter)
+
+                def simTime = ""
+                valueMap.each { ak, av ->
+                    if (ak.contains("stop")) simTime = av
+                }
+
+                if(!simTime.isEmpty()){
+                    simItems.put("simTime",simTime)
+                }
+            }
+        }
+        return simItems
+    }
+
+
+
+
     def formatInput(def input) {
 
         //define central node
