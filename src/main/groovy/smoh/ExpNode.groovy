@@ -4,6 +4,8 @@ import main.java.com.utils.NodeType
 
 class ExpNode extends HBase{
 
+    public String model
+
     ExpNode(String caption)
     {
         super(caption)

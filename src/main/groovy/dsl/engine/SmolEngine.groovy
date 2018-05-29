@@ -61,6 +61,10 @@ class ConverterConfigurationDsl {
     def connect(String converter){
         configItem << "'connect':'${converter}'"
     }
+
+    def model(String model){
+        configItem << "'model':'${model}'"
+    }
 }
 
 class SensorConfigurationDsl {

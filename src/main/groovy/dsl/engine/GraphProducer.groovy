@@ -34,6 +34,7 @@ class Sensor {
 class Converter {
     String name
     String connect
+    String model
 }
 
 class GraphProducer {
@@ -118,12 +119,14 @@ class GraphProducer {
 
                     valueMap.each { ck, cv ->
                         if (ck.contains("connect")) converter.connect = cv
+                        if (ck.contains("model")) converter.model = cv
                     }
 
                     def parentName = components.find { it.key == converter.connect }?.value
 
                     if (parentName) {
                         def newConverter = new ExpNode(converter.name)
+                        newConverter.model = converter.model
                         newConverter.connect(parentName, 10, SpeedUnit.Mb, 10)
                         varList.put(converter.name, newConverter)
 
