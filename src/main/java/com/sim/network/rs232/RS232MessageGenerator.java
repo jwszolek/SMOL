@@ -18,7 +18,6 @@ public class RS232MessageGenerator extends ExternalEvent {
     public RS232MessageGenerator(Model owner, String name, boolean showInTrace, RS232Adapter rsConverter, String destAddress, double scheduleValue) {
         super(owner, name, showInTrace);
         this.rs232Adapter = rsConverter;
-        this.rs232Adapter = rsConverter;
         this.destAddress = destAddress;
         this.scheduleValue = scheduleValue;
     }

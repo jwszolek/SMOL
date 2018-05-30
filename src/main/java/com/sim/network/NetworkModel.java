@@ -9,6 +9,7 @@ import main.groovy.smoh.HBase;
 import main.groovy.smoh.SANode;
 import main.groovy.smoh.TNode;
 import main.java.com.sim.network.bacnet.BacnetAdapter;
+import main.java.com.sim.network.bacnet.BacnetMessageGenerator;
 import main.java.com.sim.network.rs232.RS232Adapter;
 import main.java.com.sim.network.rs232.RS232MessageGenerator;
 
@@ -128,11 +129,14 @@ public class NetworkModel extends Model{
                     if(converterObj.model.equals("rs232")) {
                         RS232Adapter rs232Converter = new RS232Adapter(this, name, false, adapterInfo.values().stream().findFirst().get());
                         rs232Converter.schedule(new TimeSpan(0));
+                        convertersLst.put(name, rs232Converter);
                         sendTraceNote("RS232Adapter has been created " + rs232Converter.getName());
 
-                        convertersLst.put(name, rs232Converter);
                     }else if (converterObj.model.equals("bacnet")){
-
+                        BacnetAdapter bacnetConverter = new BacnetAdapter(this, name, false, adapterInfo.values().stream().findFirst().get());
+                        bacnetConverter.schedule(new TimeSpan(0));
+                        convertersLst.put(name, bacnetConverter);
+                        sendTraceNote("BacnetAdapter has been created " + bacnetConverter.getName());
                     }
                 }
             }
@@ -162,16 +166,19 @@ public class NetworkModel extends Model{
                 Map<String, Object> converterInfo = convertersLst.entrySet().stream().filter(x -> sensorConnectedTo.equals(x.getKey()))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-                //TODO: it needs to be more genetic - we should support different types, not only RS232Adapter
                 if(!converterInfo.isEmpty()){
 
                     if(converterInfo.entrySet().stream().findFirst().get().getValue() instanceof RS232Adapter) {
                         RS232MessageGenerator rs232MessageGenerator = new RS232MessageGenerator(this, name, true,
                                 (RS232Adapter)converterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
                         rs232MessageGenerator.schedule(new TimeSpan(0));
+                        sendTraceNote("RS232 sensor has been created " + rs232MessageGenerator.getName());
                     }
                     else if(converterInfo.entrySet().stream().findFirst().get().getValue() instanceof BacnetAdapter){
-
+                        BacnetMessageGenerator bacnetMsgGenerator = new BacnetMessageGenerator(this, name, true,
+                                (BacnetAdapter)converterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
+                        bacnetMsgGenerator.schedule(new TimeSpan(0));
+                        sendTraceNote("Bacnet sensor has been created " + bacnetMsgGenerator.getName());
                     }
                 }
             }
