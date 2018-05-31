@@ -99,7 +99,7 @@ class GraphProducer {
                 }
 
                 def newAdapter = new TNode(adapter.name, adapter.ip)
-                newAdapter.connect(root, 10, SpeedUnit.Mb, 30)
+                newAdapter.connect(root, 1, SpeedUnit.Mb, 30)
                 varList.put(adapter.name, newAdapter)
 
                 components.put(adapter.name, newAdapter)
@@ -127,7 +127,7 @@ class GraphProducer {
                     if (parentName) {
                         def newConverter = new ExpNode(converter.name)
                         newConverter.model = converter.model
-                        newConverter.connect(parentName, 10, SpeedUnit.Mb, 10)
+                        newConverter.connect(parentName, 1, SpeedUnit.Mb, 10)
                         varList.put(converter.name, newConverter)
 
                         components.put(converter.name, newConverter)
@@ -155,7 +155,7 @@ class GraphProducer {
 
                     if (parentName) {
                         def newSensor = new SANode(sensor.name)
-                        newSensor.connect(parentName, 10, SpeedUnit.Mb, 10)
+                        newSensor.connect(parentName, 1, SpeedUnit.Mb, 10)
                         newSensor.destAddress = sensor.destAddress
                         newSensor.freq = sensor.freq
                         varList.put(sensor.name, newSensor)
