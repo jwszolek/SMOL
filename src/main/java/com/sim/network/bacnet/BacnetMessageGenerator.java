@@ -1,4 +1,4 @@
-package main.java.com.sim.network.rs232;
+package main.java.com.sim.network.bacnet;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
@@ -8,31 +8,29 @@ import main.java.com.sim.network.NetworkModel;
 
 import java.util.concurrent.TimeUnit;
 
-public class RS232MessageGenerator extends ExternalEvent {
+public class BacnetMessageGenerator extends ExternalEvent {
 
-    private RS232Adapter rs232Adapter;
+    private BacnetAdapter bacnetAdapter;
     private String destAddress;
     private double scheduleValue;
 
-
-    public RS232MessageGenerator(Model owner, String name, boolean showInTrace, RS232Adapter rsConverter, String destAddress, double scheduleValue) {
+    public BacnetMessageGenerator(Model owner, String name, boolean showInTrace, BacnetAdapter bnConverter, String destAddress, double scheduleValue) {
         super(owner, name, showInTrace);
-        this.rs232Adapter = rsConverter;
+        this.bacnetAdapter = bnConverter;
         this.destAddress = destAddress;
         this.scheduleValue = scheduleValue;
     }
 
     @Override
     public void eventRoutine() throws SuspendExecution {
-        NetworkModel model = (NetworkModel)getModel();
-        RS232Message msg = new RS232Message(model, "RS232 Message", true);
+        NetworkModel model = (NetworkModel) getModel();
+        BacnetMessage msg = new BacnetMessage(model, "Bacnet Message", true);
         msg.setTcpDstAddress(destAddress);
-        sendTraceNote("RS232 Message Created ");
+        sendTraceNote("Bacnet Message Created ");
 
 
-        RS232ConverterEvent converter = new RS232ConverterEvent(model, "RS232 Converter Event", true, this.rs232Adapter);
+        BacnetConverterEvent converter = new BacnetConverterEvent(model, "Bacnet Converter Event", true, this.bacnetAdapter);
         converter.schedule(msg, new TimeSpan(10, TimeUnit.MICROSECONDS));
-
 
         schedule(new TimeSpan(this.scheduleValue, TimeUnit.MILLISECONDS));
     }
