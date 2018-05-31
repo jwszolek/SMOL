@@ -1,0 +1,180 @@
+tn "fdd-server", {
+    ip "2"
+}
+
+tn "eth1", {
+    ip "1"
+}
+
+tn "eth3", {
+    ip "3"
+}
+
+tn "eth4", {
+    ip "4"
+}
+
+
+expander "bacnet-floor1-gw", {
+    connect "eth1"
+    model "bacnet"
+}
+
+expander "bacnet-floor2-gw", {
+    connect "eth3"
+    model "bacnet"
+}
+
+expander "bacnet-floor3-gw", {
+    connect "eth4"
+    model "bacnet"
+}
+
+
+/* FLOOR 3 */
+san "temp-sensor-bacnet-floor3-1",{
+    connect "bacnet-floor3-gw"
+    destAddress "4"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-floor3-2",{
+    connect "bacnet-floor3-gw"
+    destAddress "4"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-floor3-3",{
+    connect "bacnet-floor3-gw"
+    destAddress "4"
+    freq "1500"
+}
+
+san "temp-sensor-bacnet-floor3-4",{
+    connect "bacnet-floor3-gw"
+    destAddress "4"
+    freq "1500"
+}
+
+san "temp-sensor-bacnet-floor3-5",{
+    connect "bacnet-floor3-gw"
+    destAddress "4"
+    freq "600"
+}
+
+
+
+/* FLOOR 2 */
+san "temp-sensor-bacnet-floor2-1",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-floor2-2",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-floor2-3",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-floor2-4",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-floor2-5",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "550"
+}
+
+san "temp-sensor-bacnet-floor2-6",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "550"
+}
+
+san "temp-sensor-bacnet-floor2-7",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "560"
+}
+
+san "temp-sensor-bacnet-floor2-8",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "570"
+}
+
+san "temp-sensor-bacnet-floor2-8",{
+    connect "bacnet-floor2-gw"
+    destAddress "3"
+    freq "570"
+}
+
+
+/* FLOOR 1 */
+san "temp-sensor-bacnet-1",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "1500"
+}
+
+san "temp-sensor-bacnet-2",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-3",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "1500"
+}
+
+san "temp-sensor-bacnet-4",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-5",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-6",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-7",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+
+action "draw", {
+    fullmap "true"
+}
+
+// stop after 5 sek
+action "sim", {
+    stop "10000"
+}
+
+
+
+
+
+
