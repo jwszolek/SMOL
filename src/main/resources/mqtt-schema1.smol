@@ -1,0 +1,28 @@
+tn "openhub-server", {
+    ip "2"
+}
+
+tn "eth1", {
+    ip "1"
+}
+
+expander "mqtt-broker", {
+    connect "eth1"
+    model "bacnet"
+}
+
+
+san "temp-sensor-mqtt-1",{
+    connect "mqtt-broker"
+    destAddress "2"
+    freq "500"
+}
+
+action "draw", {
+    fullmap "true"
+}
+
+
+
+
+
