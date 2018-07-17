@@ -7,7 +7,7 @@ tn "eth1", {
 }
 
 tn "eth3", {
-    ip "3"
+ip "3"
 }
 
 tn "eth4", {

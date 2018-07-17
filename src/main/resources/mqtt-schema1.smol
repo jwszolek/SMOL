@@ -1,22 +1,66 @@
 tn "openhub-server", {
-    ip "2"
+    ip "4"
 }
 
 tn "eth1", {
     ip "1"
 }
 
-expander "mqtt-broker", {
+tn "eth2", {
+    ip "2"
+}
+
+tn "eth3", {
+    ip "3"
+}
+
+expander "mqtt-broker-1", {
     connect "eth1"
     model "bacnet"
 }
 
+expander "mqtt-broker-2", {
+    connect "eth2"
+    model "bacnet"
+}
+
+expander "mqtt-broker-3", {
+    connect "mqtt-broker-2"
+    model "bacnet"
+}
 
 san "temp-sensor-mqtt-1",{
-    connect "mqtt-broker"
-    destAddress "2"
+    connect "mqtt-broker-1"
+    destAddress "3"
     freq "500"
 }
+
+san "temp-sensor-mqtt-2",{
+    connect "mqtt-broker-1"
+    destAddress "3"
+    freq "500"
+}
+
+
+san "temp-sensor-mqtt-3",{
+    connect "mqtt-broker-1"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-4",{
+    connect "mqtt-broker-2"
+    destAddress "3"
+    freq "500"
+}
+
+
+san "temp-sensor-mqtt-5",{
+    connect "mqtt-broker-2"
+    destAddress "3"
+    freq "500"
+}
+
 
 action "draw", {
     fullmap "true"
