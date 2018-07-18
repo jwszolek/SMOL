@@ -155,7 +155,7 @@ san "temp-sensor-bacnet-6",{
     connect "bacnet-floor1-gw"
     destAddress "2"
     freq "500"
-}
+}//
 
 san "temp-sensor-bacnet-7",{
     connect "bacnet-floor1-gw"
@@ -168,9 +168,9 @@ action "draw", {
     fullmap "true"
 }
 
-// stop after 5 sek
+// stop after 1.5 sek
 action "sim", {
-    stop "10000"
+    stop "1500"
 }
 
 

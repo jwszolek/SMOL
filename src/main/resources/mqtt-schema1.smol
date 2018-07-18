@@ -1,63 +1,165 @@
-tn "openhub-server", {
-    ip "4"
+tn "openhab-server", {
+    ip "2"
 }
 
 tn "eth1", {
     ip "1"
 }
 
-tn "eth2", {
-    ip "2"
-}
-
 tn "eth3", {
     ip "3"
 }
 
-expander "mqtt-broker-1", {
+tn "eth4", {
+    ip "4"
+}
+
+
+expander "mqtt-floor1-gw", {
     connect "eth1"
-    model "bacnet"
+    model "mqtt"
 }
 
-expander "mqtt-broker-2", {
-    connect "eth2"
-    model "bacnet"
+expander "mqtt-floor2-gw", {
+    connect "eth3"
+    model "mqtt"
 }
 
-expander "mqtt-broker-3", {
-    connect "mqtt-broker-2"
-    model "bacnet"
+expander "mqtt-floor3-gw", {
+    connect "eth4"
+    model "mqtt"
 }
 
-san "temp-sensor-mqtt-1",{
-    connect "mqtt-broker-1"
+
+/* FLOOR 3 */
+san "temp-sensor-mqtt-floor3-1",{
+    connect "mqtt-floor3-gw"
+    destAddress "4"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-floor3-2",{
+    connect "mqtt-floor3-gw"
+    destAddress "4"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-floor3-3",{
+    connect "mqtt-floor3-gw"
+    destAddress "4"
+    freq "1500"
+}
+
+san "temp-sensor-mqtt-floor3-4",{
+    connect "mqtt-floor3-gw"
+    destAddress "4"
+    freq "1500"
+}
+
+san "temp-sensor-mqtt-floor3-5",{
+    connect "mqtt-floor3-gw"
+    destAddress "4"
+    freq "600"
+}
+
+
+
+/* FLOOR 2 */
+san "temp-sensor-mqtt-floor2-1",{
+    connect "mqtt-floor2-gw"
     destAddress "3"
     freq "500"
+}
+
+san "temp-sensor-mqtt-floor2-2",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-floor2-3",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-floor2-4",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-floor2-5",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "550"
+}
+
+san "temp-sensor-mqtt-floor2-6",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "550"
+}
+
+san "temp-sensor-mqtt-floor2-7",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "560"
+}
+
+san "temp-sensor-mqtt-floor2-8",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "570"
+}
+
+san "temp-sensor-mqtt-floor2-8",{
+    connect "mqtt-floor2-gw"
+    destAddress "3"
+    freq "570"
+}
+
+
+/* FLOOR 1 */
+san "temp-sensor-mqtt-1",{
+    connect "mqtt-floor1-gw"
+    destAddress "2"
+    freq "1500"
 }
 
 san "temp-sensor-mqtt-2",{
-    connect "mqtt-broker-1"
-    destAddress "3"
+    connect "mqtt-floor1-gw"
+    destAddress "2"
     freq "500"
 }
 
-
 san "temp-sensor-mqtt-3",{
-    connect "mqtt-broker-1"
-    destAddress "3"
-    freq "500"
+    connect "mqtt-floor1-gw"
+    destAddress "2"
+    freq "1500"
 }
 
 san "temp-sensor-mqtt-4",{
-    connect "mqtt-broker-2"
-    destAddress "3"
+    connect "mqtt-floor1-gw"
+    destAddress "2"
     freq "500"
 }
 
-
 san "temp-sensor-mqtt-5",{
-    connect "mqtt-broker-2"
-    destAddress "3"
+    connect "mqtt-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-6",{
+    connect "mqtt-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+san "temp-sensor-mqtt-7",{
+    connect "mqtt-floor1-gw"
+    destAddress "2"
     freq "500"
 }
 
@@ -65,6 +167,12 @@ san "temp-sensor-mqtt-5",{
 action "draw", {
     fullmap "true"
 }
+
+// stop after 1.5 sek
+action "sim", {
+    stop "1500"
+}
+
 
 
 
