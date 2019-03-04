@@ -43,7 +43,10 @@ Below we introduce the basic types of nodes used in graphs to properly represent
 
 In general, a central node (CN component) is an object of type MIMO (with multiple inputs and outputs). It is a necessary component in defining practical MDC networks. In an actual computer connection network, such a component represents a centre for transmitted information that receives data from measuring gauges and transmits information or control signals to receivers or actuators. A general scheme of such node is shown below.
 
-<a href="url"><img src="readme-media/central_node.png" align="central" height="120" width="120" ></a>
+<p align="center">
+  <img src="readme-media/central_node.png" align="central" height="300" width="300" />
+</p>
+  
 
 
 ## First simulation
