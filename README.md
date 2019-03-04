@@ -64,7 +64,7 @@ In an actual implementation of an MDC network, the components TN are assigned sp
 MDC systems often require quick, and rather simple, modification of the transmitted data stream. Therefore, transformers (TRs) enable one to implement a program of universal mathematical function T(A) (sum, difference, product, quotient, differentiation, integration, averaging, and some slightly more complex digital filters) operating on the input data. Currently, the possibility of using transformers is provided only for the nodes CN and TN.
 
 <p align="center">
-  <img src="readme-media/transformer-node.png" width="250" height="84" />
+  <img src="readme-media/transformer-node.png" width="320" height="240" />
 </p>
 
 
