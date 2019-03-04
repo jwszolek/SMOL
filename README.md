@@ -44,7 +44,7 @@ Below we introduce the basic types of nodes used in graphs to properly represent
 In general, a central node (CN component) is an object of type MIMO (with multiple inputs and outputs). It is a necessary component in defining practical MDC networks. In an actual computer connection network, such a component represents a centre for transmitted information that receives data from measuring gauges and transmits information or control signals to receivers or actuators. A general scheme of such node is shown below.
 
 <p align="center">
-  <img src="readme-media/central_node.png"  />
+  <img src="readme-media/central_node.png?raw=true"  />
 </p>
 
 ### Transferring Node TN
@@ -55,9 +55,17 @@ The kernel of this node can perform all necessary functions T(A) transforming in
 In an actual implementation of an MDC network, the components TN are assigned specific inputs and outputs, and the desired methods of signal transmission attributed to them. In practice, transmitters are working in most universal contemporary wire and wireless standards (WiFi11, ZigBee12, Switch13, Modem).
 
 <p align="center">
-  <img src="readme-media/transfer_node.png"  />
+  <img src="readme-media/transfer_node.png?raw=true"  />
 </p>
 
+
+### Transformer TR – transforming function
+
+MDC systems often require quick, and rather simple, modification of the transmitted data stream. Therefore, transformers (TRs) enable one to implement a program of universal mathematical function T(A) (sum, difference, product, quotient, differentiation, integration, averaging, and some slightly more complex digital filters) operating on the input data. Currently, the possibility of using transformers is provided only for the nodes CN and TN.
+
+<p align="center">
+  <img src="readme-media/transformer-node.png?raw=true"  />
+</p>
 
 
 ## First simulation
