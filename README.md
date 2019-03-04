@@ -39,14 +39,25 @@ One of the best ways of modelling industrial computer networks is to use a direc
 
 Below we introduce the basic types of nodes used in graphs to properly represent network relations. The main division concerns the use of static and dynamic nodes implementing transforming functions.
 
-## Central Node CN
+### Central Node CN
 
 In general, a central node (CN component) is an object of type MIMO (with multiple inputs and outputs). It is a necessary component in defining practical MDC networks. In an actual computer connection network, such a component represents a centre for transmitted information that receives data from measuring gauges and transmits information or control signals to receivers or actuators. A general scheme of such node is shown below.
 
 <p align="center">
   <img src="readme-media/central_node.png"  />
 </p>
-  
+
+### Transferring Node TN
+
+Transferring node is a universal element of type MIMO, which functions as a transmitter (element TN) in the network; it has a structure shown in figure below, where components CC and R/T function analogously to those described above for the central node.
+The kernel of this node can perform all necessary functions T(A) transforming information A.
+
+In an actual implementation of an MDC network, the components TN are assigned specific inputs and outputs, and the desired methods of signal transmission attributed to them. In practice, transmitters are working in most universal contemporary wire and wireless standards (WiFi11, ZigBee12, Switch13, Modem).
+
+<p align="center">
+  <img src="readme-media/transfer_node.png"  />
+</p>
+
 
 
 ## First simulation
