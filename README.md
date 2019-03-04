@@ -154,8 +154,7 @@ Simulation results:
 
 ## SMOL syntax elements
 
-* Adapter
-
+* Adapter - allows to define a network adapter, assign IP address and name, set destination for TCP packages and attach TCP packages generator.
 * Converter
 
 * Sensor
