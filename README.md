@@ -28,19 +28,24 @@ mvn clean install
 ## Language concept
 
 SMOL, the dedicated language of semantics enabling the designer to model measurement- diagnostics-control networks, is an example of a domain-specific tool, tailored to solve problems from a specific area.
+
 Description of the network structure is an essential basis for representing the problems of configuration, re-structuralisation, and optimisation of network subsystems. In other words, SMOL is used to describe the components of a diagnostic network, and the accompanying connections, along with their appropriate parameterisation. Such a formal representation will also enable one to verify the future process of implementing such a network with the use of a relevant parser; which is a software platform for analysing a programmed network structure and its parameters.
+
 The semantics of the language (SMOL) are based on structures of hierarchical processing. It is assumed that all network signals are eventually bundled together in the Central Node, which is a central vertex of the analysed graph.
 
 ## Components of network description
 
 One of the best ways of modelling industrial computer networks is to use a directed flow graph as a tool suitable for describing relations occurring in a network of interconnections. Such a model is represented by a triple of sets (vertices, edges, and mappings). By defining these sets, we can precisely express the diagram of information flows in the MDC networks.
+
 Below we introduce the basic types of nodes used in graphs to properly represent network relations. The main division concerns the use of static and dynamic nodes implementing transforming functions.
 
 ## Central Node CN
 
 In general, a central node (CN component) is an object of type MIMO (with multiple inputs and outputs). It is a necessary component in defining practical MDC networks. In an actual computer connection network, such a component represents a centre for transmitted information that receives data from measuring gauges and transmits information or control signals to receivers or actuators. A general scheme of such node is shown below.
 
-
+<p align="center">
+  <img src="readme-media/central_node.png?raw=true" alt="central node"/>
+</p>
 
 
 ## First simulation
