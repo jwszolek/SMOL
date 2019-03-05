@@ -76,55 +76,67 @@ SMOL code below describes a simple measurement network presented on the image be
   
 
 ```
-/*
- * Define a network adapter 
- * Assign IP address and name
- * Set destination for TCP packages
- * Attach TCP packages generator   
- */
-adapter "eth1", {
+// Transfer node definition
+// Define a network adapter
+// Assign IP address
+tn "eth1", {
     ip "1"
-    generator_connected "true"
-    dst "Server"
 }
 
-/*
- * Define a network adapter
- * Assign IP address and name
- */
-adapter "Server", {
+tn "eth3", {
+    ip "3"
+}
+
+tn "server", {
     ip "2"
 }
 
-/*
- * Define rs485 converter
- * Set destination IP or name
- */
-converter "rs485", {
-    dst "Server"
+expander "bacnet-gw-1", {
+    connect "eth4"
+    model "bacnet"
 }
 
-/*
- * Temp sensor definition
- * Connect sensor to rs485 bus
- */
-sensor "temperature", {
-    connect "rs485"
+// Expander node definition
+// Define CAN network gateway
+// Connect to the Transfer node
+expander "can-gw", {
+    connect "eth1"
+    model "bacnet"
 }
 
-/*
- * Run map function which draws a graph with all connections 
- */ 
-draw "map", {
+
+// Expander node definition
+// Define Bacnet network gateway
+// Connect to the Transfer node
+expander "bacnet-gw", {
+    connect "eth3"
+    model "bacnet"
+}
+
+// Temp sensor definition
+// Connect sensor to CAN bus
+// Set measure values final destination address (2)
+san "temp-sensor-can-1",{
+    connect "can-gw"
+    destAddress "2"
+    freq "2000" }
+
+san "temp-sensor-can-2",{
+    connect "can-gw"
+    destAddress "2"
+    freq "200"
+}
+
+// Draw graph
+action "draw", {
     fullmap "true"
 }
 
-/*
- * Run simulation phase 
- */
-sim "run", {
-    stop "10s"
+// Run simulation phase. Stop simulation after 60 sec.
+action "sim", {
+    stop "60000"
 }
+
 ```
 
 To start the simulation provide a SMOL script as a parameter:
@@ -154,10 +166,10 @@ Simulation results:
 
 ## SMOL syntax elements
 
-* Adapter - allows to define a network adapter, assign IP address and name, set destination for TCP packages and attach TCP packages generator.
-* Converter
+* 'tn "name" { ip address and other params }'
+* 
 
-* Sensor
+* 
 
 
 
