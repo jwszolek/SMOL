@@ -167,14 +167,12 @@ Simulation results:
 ## SMOL syntax elements
 
 * `tn "name" { ip address }`
-*  `expander "name" { connect name_of_device, model type }`
-* 
+*  `expander "name" { connect device_name, model type }`
+* `san "name" { connect device_name, destAddress ip_address, freq value_generation_frequency }`
 
 
-
-## TODO
+## TODO list
 * Support MQTT simulation
-
 
 
 ## References
