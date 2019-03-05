@@ -166,9 +166,8 @@ Simulation results:
 
 ## SMOL syntax elements
 
-* 'tn "name" { ip address and other params }'
-* 
-
+* `tn "name" { ip address }`
+*  `expander "name" { connect name_of_device, model type }`
 * 
 
 
