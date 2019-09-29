@@ -1,6 +1,5 @@
 package main.java.com.sim.network.mqtt;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
@@ -11,9 +10,9 @@ import main.java.com.sim.network.TCPMessage;
 import java.util.concurrent.TimeUnit;
 
 public class MqttAdapter extends ExternalEvent {
-    public Queue<TCPMessage> inMqttAdapterQueue;
-    public Queue<TCPMessage> outMqttAdapterQueue;
-    private EthAdapter ethAdapter;
+    private final Queue<TCPMessage> inMqttAdapterQueue;
+    private final Queue<TCPMessage> outMqttAdapterQueue;
+    private final EthAdapter ethAdapter;
 
     public MqttAdapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
         super(owner, name, showInTrace);
@@ -23,18 +22,24 @@ public class MqttAdapter extends ExternalEvent {
     }
 
     @Override
-    public void eventRoutine() throws SuspendExecution {
-
+    public void eventRoutine() {
         if(!inMqttAdapterQueue.isEmpty()){
             TCPMessage msg = inMqttAdapterQueue.first();
             inMqttAdapterQueue.remove(msg);
-            getEthAdapter().outMsgQueue.insert(msg);
+            getEthAdapter().getOutMsgQueue().insert(msg);
         }
-
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
     }
 
     public EthAdapter getEthAdapter() {
         return ethAdapter;
+    }
+
+    public Queue<TCPMessage> getInMqttAdapterQueue() {
+        return inMqttAdapterQueue;
+    }
+
+    public Queue<TCPMessage> getOutMqttAdapterQueue() {
+        return outMqttAdapterQueue;
     }
 }

@@ -4,18 +4,15 @@ import desmoj.core.simulator.Entity;
 import desmoj.core.simulator.Model;
 
 public class MqttMessage extends Entity {
-    private String tcpDstAddress;
+    private final String dstAddr;
 
-    public MqttMessage(Model owner, String name, boolean showInTrace) {
+    public MqttMessage(Model owner, String name, boolean showInTrace, String dstAddr) {
         super(owner, name, showInTrace);
+        this.dstAddr = dstAddr;
     }
 
-    public String getTcpDstAddress() {
-        return tcpDstAddress;
-    }
-
-    public void setTcpDstAddress(String tcpDstAddress) {
-        this.tcpDstAddress = tcpDstAddress;
+    public String getDstAddr() {
+        return dstAddr;
     }
 }
 

@@ -5,11 +5,15 @@ import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeInstant;
 
 public class TCPMessage extends Entity {
-
     private String dstAddress;
     private String srcAddress;
     private TimeInstant startTransmission;
     private TimeInstant stopTransmission;
+
+    public TCPMessage(Model owner, String name, boolean showInTrace){
+        super(owner, name, showInTrace);
+        startTransmission = presentTime();
+    }
 
     public TimeInstant getTransmissionTime(){
         return new TimeInstant(stopTransmission.getTimeAsDouble() - startTransmission.getTimeAsDouble());
@@ -34,10 +38,4 @@ public class TCPMessage extends Entity {
     public void setSrcAddress(String srcAddress) {
         this.srcAddress = srcAddress;
     }
-
-    public TCPMessage(Model owner, String name, boolean showInTrace){
-        super(owner, name, showInTrace);
-        startTransmission = presentTime();
-    }
-
 }

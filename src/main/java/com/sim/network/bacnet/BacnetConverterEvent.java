@@ -23,7 +23,7 @@ public class BacnetConverterEvent extends Event<BacnetMessage> {
 
         TCPMessage tcpMessage = new TCPMessage(model, "Bacnet To TCP", true);
         tcpMessage.setDstAddress(bacnetMessage.getTcpDstAddress());
-        tcpMessage.setDstAddress(this.bacnetAdapter.getEthAdapter().getAdapterAddress());
+        tcpMessage.setSrcAddress(this.bacnetAdapter.getEthAdapter().getAdapterAddress());
         if(this.bacnetAdapter.inBacnetAdapterQueue != null) {
             this.bacnetAdapter.inBacnetAdapterQueue.insert(tcpMessage);
         }

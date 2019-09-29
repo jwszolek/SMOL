@@ -1,6 +1,5 @@
 package main.java.com.sim.network.bacnet;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
@@ -22,7 +21,7 @@ public class BacnetMessageGenerator extends ExternalEvent {
     }
 
     @Override
-    public void eventRoutine() throws SuspendExecution {
+    public void eventRoutine() {
         NetworkModel model = (NetworkModel) getModel();
         BacnetMessage msg = new BacnetMessage(model, "Bacnet Message", true);
         msg.setTcpDstAddress(destAddress);

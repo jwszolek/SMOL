@@ -1,23 +1,21 @@
 package main.java.com.sim.network;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeInstant;
 import desmoj.core.simulator.TimeSpan;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class EthCollisionMonitor extends ExternalEvent {
 
-    public EthCollisionMonitor(Model owner, String name, boolean showInTrace, List<EthAdapter> adapters) {
+    public EthCollisionMonitor(Model owner, String name, boolean showInTrace) {
         super(owner, name, showInTrace);
     }
 
     @Override
-    public void eventRoutine() throws SuspendExecution {
+    public void eventRoutine() {
 
         NetworkModel model = (NetworkModel)getModel();
 
@@ -49,7 +47,6 @@ public class EthCollisionMonitor extends ExternalEvent {
                 if(!model.ethLink.isEmpty() && Objects.equals(ethLinkFrame,frame.getInsertedTime())
                         && !Objects.equals(model.ethLink.first().adapter.getName(), frame.adapter.getName())) {
 
-
                     sendTraceNote("ethLink inserted time = " + model.ethLink.first().getInsertedTime());
                     sendTraceNote("ethLink inserted time = " + model.ethLink.first());
                     sendTraceNote("frame inserted time = " + frame.getInsertedTime());
@@ -72,7 +69,7 @@ public class EthCollisionMonitor extends ExternalEvent {
                     // ETH-Link item
                     EthFrame linkFrame = model.ethLink.first();
                     EthAdapter linkAdapter = linkFrame.getAdapter();
-                    linkAdapter.outAdapterQueue.insert(linkFrame);
+                    linkAdapter.getOutAdapterQueue().insert(linkFrame);
                     linkAdapter.setCollisionDetected(true);
                     model.ethLink.remove(linkFrame);
 
@@ -83,13 +80,12 @@ public class EthCollisionMonitor extends ExternalEvent {
 
                     EthAdapter colAdapter = frame.getAdapter();
                     colAdapter.setCollisionDetected(true);
-                    colAdapter.outAdapterQueue.insert(frame);
+                    colAdapter.getOutAdapterQueue().insert(frame);
                     model.ethPendingBuffer.remove(frame);
                     double colAdapterWait = getCollisionWaitingTimeSlot();
                     ReleaseEthAdapterEvent rAdapterCol = new ReleaseEthAdapterEvent(model, "collision waiting", true, colAdapter);
                     rAdapterCol.schedule(frame, new TimeSpan(colAdapterWait, TimeUnit.MICROSECONDS));
                     sendTraceNote("Collision waiting time slot = " + colAdapterWait + " adapter = " + colAdapter.getName());
-
                 }
             }
         }
@@ -105,6 +101,4 @@ public class EthCollisionMonitor extends ExternalEvent {
         double Ri = model.getRandCollisionValue();
         return Ri * SlotTime;
     }
-
-
 }

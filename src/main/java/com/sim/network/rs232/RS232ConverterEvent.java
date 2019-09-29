@@ -24,7 +24,7 @@ public class RS232ConverterEvent extends Event<RS232Message> {
 
         TCPMessage tcpMessage = new TCPMessage(model, "RS232 To TCP", true);
         tcpMessage.setDstAddress(rs232Message.getTcpDstAddress());
-        tcpMessage.setDstAddress(rs232Adapter.getEthAdapter().getAdapterAddress());
+        tcpMessage.setSrcAddress(rs232Adapter.getEthAdapter().getAdapterAddress());
         if(this.rs232Adapter.inRS232AdapterQueue != null) {
             this.rs232Adapter.inRS232AdapterQueue.insert(tcpMessage);
         }
