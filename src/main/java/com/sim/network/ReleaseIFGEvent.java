@@ -10,7 +10,7 @@ public class ReleaseIFGEvent extends Event<EthFrame> {
     private final EthLinkRouter ethLinkRouter;
     private final EthAdapter ethAdapter;
 
-    public ReleaseIFGEvent(Model owner, String name, boolean showInTrace, EthLinkRouter router, EthAdapter adapter) {
+    ReleaseIFGEvent(Model owner, String name, boolean showInTrace, EthLinkRouter router, EthAdapter adapter) {
         super(owner, name, showInTrace);
         this.ethLinkRouter = router;
         this.ethAdapter = adapter;
@@ -18,10 +18,10 @@ public class ReleaseIFGEvent extends Event<EthFrame> {
 
     @Override
     public void eventRoutine(EthFrame ethFrame) {
-        NetworkModel model = (NetworkModel)getModel();
-        model.ethLink.remove(ethFrame);
+        NetworkModel model = (NetworkModel) getModel();
+        model.getEthLink().remove(ethFrame);
 
-        sendTraceNote("ETHLINK-LEFT-"+ethFrame.adapter.getName());
+        sendTraceNote("ETHLINK-LEFT-" + ethFrame.adapter.getName());
         ethFrame.setStopTransmission(presentTime());
 
         if (ethAdapter != null) {

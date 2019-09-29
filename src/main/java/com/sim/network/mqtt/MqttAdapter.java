@@ -17,13 +17,13 @@ public class MqttAdapter extends ExternalEvent {
     public MqttAdapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
         super(owner, name, showInTrace);
         this.ethAdapter = ethAdapter;
-        this.inMqttAdapterQueue = new Queue<>(owner,"in-mqtt-adapterQueue-",true,true);
-        this.outMqttAdapterQueue = new Queue<>(owner,"out-mqtt-adapterQueue-",true,true);
+        this.inMqttAdapterQueue = new Queue<>(owner, "in-mqtt-adapterQueue-", true, true);
+        this.outMqttAdapterQueue = new Queue<>(owner, "out-mqtt-adapterQueue-", true, true);
     }
 
     @Override
     public void eventRoutine() {
-        if(!inMqttAdapterQueue.isEmpty()){
+        if (!inMqttAdapterQueue.isEmpty()) {
             TCPMessage msg = inMqttAdapterQueue.first();
             inMqttAdapterQueue.remove(msg);
             getEthAdapter().getOutMsgQueue().insert(msg);

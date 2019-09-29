@@ -1,6 +1,5 @@
 package main.java.com.sim.network.rs232;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
@@ -19,14 +18,14 @@ public class RS232Adapter extends ExternalEvent {
     public RS232Adapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
         super(owner, name, showInTrace);
         this.ethAdapter = ethAdapter;
-        this.inRS232AdapterQueue = new Queue<>(owner,"in-rs232-adapterQueue-",true,true);
-        this.outRS232AdapterQueue = new Queue<>(owner,"out-rs232-adapterQueue-",true,true);
+        this.inRS232AdapterQueue = new Queue<>(owner, "in-rs232-adapterQueue-", true, true);
+        this.outRS232AdapterQueue = new Queue<>(owner, "out-rs232-adapterQueue-", true, true);
     }
 
     @Override
-    public void eventRoutine() throws SuspendExecution {
+    public void eventRoutine() {
 
-        if(!inRS232AdapterQueue.isEmpty()){
+        if (!inRS232AdapterQueue.isEmpty()) {
             TCPMessage msg = inRS232AdapterQueue.first();
             inRS232AdapterQueue.remove(msg);
             getEthAdapter().getOutMsgQueue().insert(msg);

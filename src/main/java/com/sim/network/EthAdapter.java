@@ -4,6 +4,8 @@ import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
 import desmoj.core.simulator.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,74 +15,57 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class EthAdapter extends ExternalEvent {
+    private final boolean ENABLE_ACK = false;
+
+    @Getter
     private final Queue<EthFrame> inAdapterQueue;
+
+    @Getter
     private final Queue<EthFrame> outAdapterQueue;
+
     private final Queue<TCPMessage> inMsgQueue;
+
+    @Getter
     private final Queue<TCPMessage> outMsgQueue;
+
+    @Getter
     private final String adapterAddress;
 
+    @Getter
+    @Setter
     private boolean collisionDetected;
 
     public EthAdapter(Model owner, String name, boolean showInTrace, String address) {
         super(owner, name, showInTrace);
-        inAdapterQueue = new Queue<EthFrame>(owner,"in-adapterQueue-"+address,true,true);
-        outAdapterQueue = new Queue<EthFrame>(owner,"out-adapterQueue-"+address,true,true);
-        inMsgQueue = new Queue<TCPMessage>(owner, "in-messageQueue-"+address, true, true);
-        outMsgQueue = new Queue<TCPMessage>(owner, "out-messageQueue-"+address, true, true);
-        this.adapterAddress = address;
+
+        inAdapterQueue = new Queue<>(owner, "in-adapterQueue-" + address, true, true);
+        outAdapterQueue = new Queue<>(owner, "out-adapterQueue-" + address, true, true);
+        inMsgQueue = new Queue<>(owner, "in-messageQueue-" + address, true, true);
+        outMsgQueue = new Queue<>(owner, "out-messageQueue-" + address, true, true);
+
+        adapterAddress = address;
+        collisionDetected = false;
     }
 
-    public Queue<EthFrame> getInAdapterQueue() {
-        return inAdapterQueue;
-    }
+    private EthFrame createFrame(NetworkModel model, String name) {
+        List<EthAdapter> adapters = model.getEthAdapterList().stream()
+                .filter(x -> Objects.equals(getName(), x.getName())).collect(Collectors.toList());
 
-    public Queue<EthFrame> getOutAdapterQueue() {
-        return outAdapterQueue;
-    }
-
-    public Queue<TCPMessage> getInMsgQueue() {
-        return inMsgQueue;
-    }
-
-    public Queue<TCPMessage> getOutMsgQueue() {
-        return outMsgQueue;
-    }
-
-    public String getAdapterAddress() {
-        return adapterAddress;
-    }
-    public boolean isCollisionDetected() {
-        return collisionDetected;
-    }
-    public void setCollisionDetected(boolean collisionDetected) {
-        this.collisionDetected = collisionDetected;
-    }
-
-    private EthFrame createFrame(String name){
-        NetworkModel model = (NetworkModel) getModel();
-
-        EthAdapter adapter = null;
-        List<EthAdapter> adapterList = model.getEthAdapterList().stream().filter(x -> Objects.equals(getName(), x.getName())).collect(Collectors.toList());
-        if (adapterList.size() == 1) {
-            adapter = adapterList.get(0);
-        } else {
-            sendTraceNote("illegal number of instance");
-        }
-
-        return new EthFrame(model, name, true, adapter, presentTime());
+        if (adapters.size() != 1) sendTraceNote("illegal number of instance");
+        return new EthFrame(model, name, true, adapters.stream().findFirst().orElse(null), presentTime());
     }
 
     @Override
     public void eventRoutine() {
         NetworkModel model = (NetworkModel) getModel();
 
-        if(!isCollisionDetected()) {
+        if (!isCollisionDetected()) {
             if (!outMsgQueue.isEmpty()) {
 
                 TCPMessage tcpMessage = outMsgQueue.first();
                 outMsgQueue.remove(tcpMessage);
 
-                EthFrame frame = createFrame("ETH-Frame");
+                EthFrame frame = createFrame(model, "ETH-Frame");
                 frame.setDestAddress(tcpMessage.getDstAddress());
                 frame.setTcpMessage(tcpMessage);
 
@@ -90,7 +75,7 @@ public class EthAdapter extends ExternalEvent {
             if (!outAdapterQueue.isEmpty()) {
                 EthFrame frame = outAdapterQueue.first();
                 outAdapterQueue.remove(frame);
-                model.ethPendingBuffer.insert(frame);
+                model.getEthPendingBuffer().insert(frame);
             }
         }
 
@@ -98,39 +83,44 @@ public class EthAdapter extends ExternalEvent {
             EthFrame inFrame = inAdapterQueue.first();
             inAdapterQueue.remove(inFrame);
 
-            inFrame.getTcpMessage().setStopTransmission(presentTime());
-            if(inFrame.getName().contains("ACK")){
-                String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS: ").format(new Date());
-                System.err.println(timeStamp+"ACK recv: src="+inFrame.getTcpMessage().getSrcAddress()+", dst="+inFrame.getTcpMessage().getDstAddress()
-                        +", "+inFrame.getName()+", adapter="+getName());
+            if (ENABLE_ACK) {
+                inFrame.getTcpMessage().setStopTransmission(presentTime());
+                if (inFrame.getName().contains("ACK")) {
+                    String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS: ").format(new Date());
 
-                sendTraceNote("FRAME-ACK " + inFrame.getName());
-                sendTraceNote("TCPMSG-ACK-TIME|"+inFrame.getTcpMessage().getTransmissionTime().toString()+"|"+getName());
+                    System.err.println(timeStamp + "ACK recv: src=" + inFrame.getTcpMessage().getSrcAddress() + ", dst=" + inFrame.getTcpMessage().getDstAddress()
+                            + ", " + inFrame.getName() + ", adapter=" + getName());
+
+                    sendTraceNote("FRAME-ACK " + inFrame.getName());
+                    sendTraceNote("TCPMSG-ACK-TIME|" + inFrame.getTcpMessage().getTransmissionTime().toString() + "|" + getName());
+                } else {
+                    TCPMessage msg = new TCPMessage(model, "ACK Message", true);
+                    msg.setSrcAddress(inFrame.getTcpMessage().getDstAddress());
+                    msg.setDstAddress(inFrame.getTcpMessage().getSrcAddress());
+
+                    EthFrame ackFrame = createFrame(model, "ACK-Frame");
+                    ackFrame.setDestAddress(msg.getDstAddress());
+                    ackFrame.setTcpMessage(msg);
+
+                    outAdapterQueue.insert(ackFrame);
+
+                    sendTraceNote("FRAME-STOP " + inFrame.getName());
+
+                    String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS: ").format(new Date());
+                    System.err.println(timeStamp + "ACK sent: src=" + ackFrame.getTcpMessage().getSrcAddress() + ", dst=" + ackFrame.getTcpMessage().getDstAddress()
+                            + ", " + ackFrame.getName() + ", adapter=" + getName());
+                }
             } else {
-                TCPMessage msg = new TCPMessage(model,"ACK Message",true);
-                msg.setSrcAddress(inFrame.getTcpMessage().getDstAddress());
-                msg.setDstAddress(inFrame.getTcpMessage().getSrcAddress());
-
-                EthFrame ackFrame = createFrame("ACK-Frame");
-                ackFrame.setDestAddress(msg.getDstAddress());
-                ackFrame.setTcpMessage(msg);
-
-                outAdapterQueue.insert(ackFrame);
-
                 sendTraceNote("FRAME-STOP " + inFrame.getName());
-
-                String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS: ").format(new Date());
-                System.err.println(timeStamp+"ACK sent: src="+ackFrame.getTcpMessage().getSrcAddress()+", dst="+ackFrame.getTcpMessage().getDstAddress()
-                        +", "+ackFrame.getName()+", adapter="+getName());
-
-                sendTraceNote("TCPMSG-LEFT-TIME|"+inFrame.getTcpMessage().getTransmissionTime().toString()+"|"+inFrame.adapter.getName());
-
-                TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
-                inMsgQueue.insert(inTCPMessage);
+                inFrame.getTcpMessage().setStopTransmission(presentTime());
             }
+
+            sendTraceNote("TCPMSG-LEFT-TIME|" + inFrame.getTcpMessage().getTransmissionTime().toString() + "|" + inFrame.adapter.getName());
+
+            TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
+            inMsgQueue.insert(inTCPMessage);
         }
 
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
-
     }
 }

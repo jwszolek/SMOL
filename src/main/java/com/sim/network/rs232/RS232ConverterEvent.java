@@ -1,6 +1,5 @@
 package main.java.com.sim.network.rs232;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Event;
 import desmoj.core.simulator.Model;
 import main.java.com.sim.network.NetworkModel;
@@ -18,13 +17,13 @@ public class RS232ConverterEvent extends Event<RS232Message> {
     }
 
     @Override
-    public void eventRoutine(RS232Message rs232Message) throws SuspendExecution {
+    public void eventRoutine(RS232Message rs232Message) {
         NetworkModel model = (NetworkModel)getModel();
         this.receivedMsg = rs232Message;
 
         TCPMessage tcpMessage = new TCPMessage(model, "RS232 To TCP", true);
         tcpMessage.setDstAddress(rs232Message.getTcpDstAddress());
-        tcpMessage.setSrcAddress(rs232Adapter.getEthAdapter().getAdapterAddress());
+        tcpMessage.setDstAddress(rs232Adapter.getEthAdapter().getAdapterAddress());
         if(this.rs232Adapter.inRS232AdapterQueue != null) {
             this.rs232Adapter.inRS232AdapterQueue.insert(tcpMessage);
         }

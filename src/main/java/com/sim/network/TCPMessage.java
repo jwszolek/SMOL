@@ -3,39 +3,29 @@ package main.java.com.sim.network;
 import desmoj.core.simulator.Entity;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeInstant;
+import lombok.Getter;
+import lombok.Setter;
 
 public class TCPMessage extends Entity {
+    @Getter
+    @Setter
     private String dstAddress;
+
+    @Getter
+    @Setter
     private String srcAddress;
+
     private TimeInstant startTransmission;
+
+    @Setter
     private TimeInstant stopTransmission;
 
-    public TCPMessage(Model owner, String name, boolean showInTrace){
+    public TCPMessage(Model owner, String name, boolean showInTrace) {
         super(owner, name, showInTrace);
         startTransmission = presentTime();
     }
 
-    public TimeInstant getTransmissionTime(){
+    TimeInstant getTransmissionTime() {
         return new TimeInstant(stopTransmission.getTimeAsDouble() - startTransmission.getTimeAsDouble());
-    }
-
-    public void setStopTransmission(TimeInstant stopTransmission) {
-        this.stopTransmission = stopTransmission;
-    }
-
-    public String getDstAddress() {
-        return dstAddress;
-    }
-
-    public void setDstAddress(String dstAddress) {
-        this.dstAddress = dstAddress;
-    }
-
-    public String getSrcAddress() {
-        return srcAddress;
-    }
-
-    public void setSrcAddress(String srcAddress) {
-        this.srcAddress = srcAddress;
     }
 }
