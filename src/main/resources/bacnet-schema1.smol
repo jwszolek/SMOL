@@ -251,5 +251,5 @@ action "draw", {
 
 // stop after 5 sek
 action "sim", {
-    stop "2500"
+    stop "6000"
 }
