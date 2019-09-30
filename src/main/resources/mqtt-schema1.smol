@@ -1,0 +1,63 @@
+tn "openhab-server", {
+    ip "99"
+}
+
+tn "eth1", {
+    ip "1"
+}
+
+tn "eth2", {
+    ip "2"
+}
+
+
+expander "mqtt-broker-1", {
+    connect "eth1"
+    model "mqtt"
+}
+
+expander "mqtt-broker-2", {
+    connect "eth2"
+    model "mqtt"
+}
+
+/* mqtt-broker-1 */
+san "temp-sensor-mqtt-1",{
+    connect "mqtt-broker-1"
+    destAddress "99"
+    freq "1500"
+}
+
+san "temp-sensor-mqtt-2",{
+    connect "mqtt-broker-1"
+    destAddress "99"
+    freq "500"
+}
+
+/* mqtt-broker-2 */
+san "temp-sensor-mqtt-3",{
+    connect "mqtt-broker-2"
+    destAddress "99"
+    freq "1500"
+}
+
+san "temp-sensor-mqtt-4",{
+    connect "mqtt-broker-2"
+    destAddress "99"
+    freq "500"
+}
+
+action "draw", {
+    fullmap "true"
+}
+
+// stop after 1.5 sek
+action "sim", {
+    stop "2500"
+}
+
+
+
+
+
+

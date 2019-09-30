@@ -1,4 +1,4 @@
-package main.java.com.sim.network.bacnet;
+package main.java.com.sim.network.mqtt;
 
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
@@ -7,15 +7,14 @@ import main.java.com.sim.network.NetworkModel;
 
 import java.util.concurrent.TimeUnit;
 
-public class BacnetMessageGenerator extends ExternalEvent {
-
-    private BacnetAdapter bacnetAdapter;
+public class MqttMessageGenerator extends ExternalEvent {
+    private MqttAdapter mqttAdapter;
     private String destAddress;
     private double scheduleValue;
 
-    public BacnetMessageGenerator(Model owner, String name, boolean showInTrace, BacnetAdapter bnConverter, String destAddress, double scheduleValue) {
+    public MqttMessageGenerator(Model owner, String name, boolean showInTrace, MqttAdapter mqttConverter, String destAddress, double scheduleValue) {
         super(owner, name, showInTrace);
-        this.bacnetAdapter = bnConverter;
+        this.mqttAdapter = mqttConverter;
         this.destAddress = destAddress;
         this.scheduleValue = scheduleValue;
     }
@@ -23,14 +22,13 @@ public class BacnetMessageGenerator extends ExternalEvent {
     @Override
     public void eventRoutine() {
         NetworkModel model = (NetworkModel) getModel();
-        BacnetMessage msg = new BacnetMessage(model, "Bacnet Message", true);
-        msg.setTcpDstAddress(destAddress);
-        sendTraceNote("Bacnet Message Created ");
+        MqttMessage msg = new MqttMessage(model, "Mqtt Message", true, destAddress);
+        sendTraceNote("Mqtt Message Created ");
 
-
-        BacnetConverterEvent converter = new BacnetConverterEvent(model, "Bacnet Converter Event", true, this.bacnetAdapter);
+        MqttConverterEvent converter = new MqttConverterEvent(model, "Mqtt Converter Event", true, mqttAdapter);
         converter.schedule(msg, new TimeSpan(10, TimeUnit.MICROSECONDS));
 
         schedule(new TimeSpan(this.scheduleValue, TimeUnit.MILLISECONDS));
     }
 }
+

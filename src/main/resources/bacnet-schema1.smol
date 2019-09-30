@@ -32,95 +32,164 @@ expander "bacnet-floor3-gw", {
 
 
 /* FLOOR 3 */
+
+// HVAC controller
+san "hvac-bacnet-floor3",{
+    connect "bacnet-floor3-gw"
+    destAddress "2"
+    freq "500"
+}
+
+// Light sensor
+san "light-bacnet-floor3",{
+    connect "bacnet-floor3-gw"
+    destAddress "2"
+    freq "500"
+}
+
 san "temp-sensor-bacnet-floor3-1",{
     connect "bacnet-floor3-gw"
-    destAddress "4"
+    destAddress "2"
     freq "500"
 }
 
 san "temp-sensor-bacnet-floor3-2",{
     connect "bacnet-floor3-gw"
-    destAddress "4"
+    destAddress "2"
     freq "500"
 }
 
 san "temp-sensor-bacnet-floor3-3",{
     connect "bacnet-floor3-gw"
-    destAddress "4"
+    destAddress "2"
     freq "1500"
 }
 
 san "temp-sensor-bacnet-floor3-4",{
     connect "bacnet-floor3-gw"
-    destAddress "4"
+    destAddress "2"
     freq "1500"
 }
 
 san "temp-sensor-bacnet-floor3-5",{
     connect "bacnet-floor3-gw"
-    destAddress "4"
+    destAddress "2"
     freq "600"
+}
+
+san "temp-sensor-bacnet-floor3-6",{
+    connect "bacnet-floor3-gw"
+    destAddress "2"
+    freq "400"
+}
+
+san "temp-sensor-bacnet-floor3-7",{
+    connect "bacnet-floor3-gw"
+    destAddress "2"
+    freq "400"
+}
+
+san "temp-sensor-bacnet-floor3-8",{
+    connect "bacnet-floor3-gw"
+    destAddress "2"
+    freq "400"
+}
+
+san "temp-sensor-bacnet-floor3-9",{
+    connect "bacnet-floor3-gw"
+    destAddress "2"
+    freq "400"
 }
 
 
 
 /* FLOOR 2 */
+
+// HVAC controller
+san "hvac-bacnet-floor2",{
+    connect "bacnet-floor2-gw"
+    destAddress "2"
+    freq "500"
+}
+
+// Light sensor
+san "light-bacnet-floor2",{
+    connect "bacnet-floor2-gw"
+    destAddress "2"
+    freq "1500"
+}
+
 san "temp-sensor-bacnet-floor2-1",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
-    freq "500"
+    destAddress "2"
+    freq "1500"
 }
 
 san "temp-sensor-bacnet-floor2-2",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
-    freq "500"
+    destAddress "2"
+    freq "1500"
 }
 
 san "temp-sensor-bacnet-floor2-3",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
+    destAddress "2"
     freq "500"
 }
 
 san "temp-sensor-bacnet-floor2-4",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
+    destAddress "2"
     freq "500"
 }
 
 san "temp-sensor-bacnet-floor2-5",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
+    destAddress "2"
     freq "550"
 }
 
 san "temp-sensor-bacnet-floor2-6",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
+    destAddress "2"
     freq "550"
 }
 
 san "temp-sensor-bacnet-floor2-7",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
+    destAddress "2"
     freq "560"
 }
 
 san "temp-sensor-bacnet-floor2-8",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
+    destAddress "2"
     freq "570"
 }
 
 san "temp-sensor-bacnet-floor2-8",{
     connect "bacnet-floor2-gw"
-    destAddress "3"
+    destAddress "2"
     freq "570"
 }
 
 
 /* FLOOR 1 */
+
+// HVAC controller
+san "hvac-bacnet-floor1",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+// Light sensor
+san "light-bacnet-floor2",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
 san "temp-sensor-bacnet-1",{
     connect "bacnet-floor1-gw"
     destAddress "2"
@@ -163,6 +232,18 @@ san "temp-sensor-bacnet-7",{
     freq "500"
 }
 
+san "temp-sensor-bacnet-8",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
+san "temp-sensor-bacnet-9",{
+    connect "bacnet-floor1-gw"
+    destAddress "2"
+    freq "500"
+}
+
 
 action "draw", {
     fullmap "true"
@@ -170,11 +251,5 @@ action "draw", {
 
 // stop after 5 sek
 action "sim", {
-    stop "10000"
+    stop "6000"
 }
-
-
-
-
-
-

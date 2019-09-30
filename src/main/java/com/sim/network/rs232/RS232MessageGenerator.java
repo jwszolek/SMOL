@@ -1,6 +1,5 @@
 package main.java.com.sim.network.rs232;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
@@ -23,7 +22,7 @@ public class RS232MessageGenerator extends ExternalEvent {
     }
 
     @Override
-    public void eventRoutine() throws SuspendExecution {
+    public void eventRoutine() {
         NetworkModel model = (NetworkModel)getModel();
         RS232Message msg = new RS232Message(model, "RS232 Message", true);
         msg.setTcpDstAddress(destAddress);

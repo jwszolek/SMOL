@@ -1,6 +1,5 @@
 package main.java.com.sim.network.rs232;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Event;
 import desmoj.core.simulator.Model;
 import main.java.com.sim.network.NetworkModel;
@@ -18,7 +17,7 @@ public class RS232ConverterEvent extends Event<RS232Message> {
     }
 
     @Override
-    public void eventRoutine(RS232Message rs232Message) throws SuspendExecution {
+    public void eventRoutine(RS232Message rs232Message) {
         NetworkModel model = (NetworkModel)getModel();
         this.receivedMsg = rs232Message;
 
