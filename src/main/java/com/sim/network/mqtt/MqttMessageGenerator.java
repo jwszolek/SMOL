@@ -12,9 +12,9 @@ public class MqttMessageGenerator extends ExternalEvent {
     private String pubTopic;
     private double scheduleValue;
 
-    public MqttMessageGenerator(Model owner, String name, boolean showInTrace, MqttAdapter mqttConverter, String pubTopic, double scheduleValue) {
+    public MqttMessageGenerator(Model owner, String name, boolean showInTrace, MqttAdapter mqttAdapter, String pubTopic, double scheduleValue) {
         super(owner, name, showInTrace);
-        this.mqttAdapter = mqttConverter;
+        this.mqttAdapter = mqttAdapter;
         this.pubTopic = pubTopic;
         this.scheduleValue = scheduleValue;
     }
