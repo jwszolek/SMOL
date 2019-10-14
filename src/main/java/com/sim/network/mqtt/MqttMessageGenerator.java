@@ -1,6 +1,5 @@
 package main.java.com.sim.network.mqtt;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
@@ -10,21 +9,21 @@ import java.util.concurrent.TimeUnit;
 
 public class MqttMessageGenerator extends ExternalEvent {
     private MqttAdapter mqttAdapter;
-    private String destAddress;
+    private String pubTopic;
     private double scheduleValue;
 
-    public MqttMessageGenerator(Model owner, String name, boolean showInTrace, MqttAdapter mqttConverter, String destAddress, double scheduleValue) {
+    public MqttMessageGenerator(Model owner, String name, boolean showInTrace, MqttAdapter mqttConverter, String pubTopic, double scheduleValue) {
         super(owner, name, showInTrace);
         this.mqttAdapter = mqttConverter;
-        this.destAddress = destAddress;
+        this.pubTopic = pubTopic;
         this.scheduleValue = scheduleValue;
     }
 
     @Override
-    public void eventRoutine() throws SuspendExecution {
+    public void eventRoutine() {
         NetworkModel model = (NetworkModel) getModel();
-        MqttMessage msg = new MqttMessage(model, "Mqtt Message", true);
-        msg.setTcpDstAddress(destAddress);
+
+        MqttMessage msg = new MqttMessage(model, "Mqtt Message", true, pubTopic);
         sendTraceNote("Mqtt Message Created ");
 
         MqttConverterEvent converter = new MqttConverterEvent(model, "Mqtt Converter Event", true, this.mqttAdapter);
