@@ -86,6 +86,10 @@ class SensorConfigurationDsl {
     def freq(String freq){
         configItem << "'freq':'${freq}'"
     }
+
+    def topics(String topics){
+        configItem << "'topics':'${topics}'"
+    }
 }
 
 class MapConfigurationDsl {

@@ -28,6 +28,7 @@ class Sensor {
     String name
     String connect
     String destAddress
+    String topics
     double freq
 }
 
@@ -40,11 +41,11 @@ class Converter {
 class GraphProducer {
 
     private DrawFirst df
-    private HashMap<String,HBase> varList
+    private HashMap<String, HBase> varList
 
     private def components = [:]
 
-    def GraphProducer(){
+    def GraphProducer() {
         df = new DrawFirst()
         varList = new HashMap()
     }
@@ -65,15 +66,13 @@ class GraphProducer {
                     if (ak.contains("stop")) simTime = av
                 }
 
-                if(!simTime.isEmpty()){
-                    simItems.put("simTime",simTime)
+                if (!simTime.isEmpty()) {
+                    simItems.put("simTime", simTime)
                 }
             }
         }
         return simItems
     }
-
-
 
 
     def formatInput(def input) {
@@ -148,7 +147,8 @@ class GraphProducer {
                     valueMap.each { sk, sv ->
                         if (sk.contains("connect")) sensor.connect = sv
                         if (sk.contains("destAddress")) sensor.destAddress = sv
-                        if (sk.contains("freq")) sensor.freq = Double.parseDouble((String)sv)
+                        if (sk.contains("freq")) sensor.freq = Double.parseDouble((String) sv)
+                        if (sk.contains("topics")) sensor.topics = sv
                     }
 
                     def parentName = components.find { it.key == sensor.connect }?.value
@@ -158,6 +158,8 @@ class GraphProducer {
                         newSensor.connect(parentName, 1, SpeedUnit.Mb, 10)
                         newSensor.destAddress = sensor.destAddress
                         newSensor.freq = sensor.freq
+                        newSensor.topics = sensor.topics
+
                         varList.put(sensor.name, newSensor)
                     }
                 }

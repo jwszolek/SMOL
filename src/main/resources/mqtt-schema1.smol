@@ -37,14 +37,13 @@ expander "mqtt-broker-4", {
 /* BROKER 4 */
 san "mqtt-openhab",{
     connect "mqtt-broker-4"
-    destAddress "4"
     freq "500"
 }
 
 /* BROKER 3 */
 san "mqtt-broker-3-sensor-1",{
     connect "mqtt-broker-3"
-    destAddress "3"
+    topics "temp,plug,hvac"
     freq "500"
 }
 
