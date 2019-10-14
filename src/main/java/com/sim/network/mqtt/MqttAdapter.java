@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import main.java.com.sim.network.EthAdapter;
 import main.java.com.sim.network.TCPMessage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -28,14 +26,27 @@ public class MqttAdapter extends ExternalEvent {
     @Getter
     private final Map<String, List<MqttMessageGenerator>> subscribers;
 
-    public MqttAdapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter, Map<String, List<MqttMessageGenerator>> subscribers) {
+    public MqttAdapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
         super(owner, name, showInTrace);
 
         this.inMqttAdapterQueue = new Queue<>(owner, "in-mqtt-adapterQueue-", true, true);
         this.outMqttAdapterQueue = new Queue<>(owner, "out-mqtt-adapterQueue-", true, true);
 
         this.ethAdapter = ethAdapter;
-        this.subscribers = subscribers;
+        this.subscribers = new HashMap<>();
+    }
+
+    public void subscribe(MqttMessageGenerator mqttClient, String subTopics) {
+        String[] topics = (subTopics != null) ? subTopics.split(",") : new String[0];
+        if (topics.length > 0) {
+            Arrays.stream(topics).forEach(topic -> {
+                if (subscribers.containsKey(topic)) {
+                    subscribers.get(topic).add(mqttClient);
+                } else {
+                    subscribers.put(topic, Collections.singletonList(mqttClient));
+                }
+            });
+        }
     }
 
     @Override
@@ -53,6 +64,10 @@ public class MqttAdapter extends ExternalEvent {
         }
 
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
+    }
+
+    Map<String, List<MqttMessageGenerator>> getSubscribers(){
+        return subscribers;
     }
 
     List<MqttMessageGenerator> getSubscribers(String topic) {

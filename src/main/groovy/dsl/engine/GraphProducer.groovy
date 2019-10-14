@@ -28,7 +28,8 @@ class Sensor {
     String name
     String connect
     String destAddress
-    String topics
+    String pubTopics
+    String subTopics
     double freq
 }
 
@@ -148,7 +149,8 @@ class GraphProducer {
                         if (sk.contains("connect")) sensor.connect = sv
                         if (sk.contains("destAddress")) sensor.destAddress = sv
                         if (sk.contains("freq")) sensor.freq = Double.parseDouble((String) sv)
-                        if (sk.contains("topics")) sensor.topics = sv
+                        if (sk.contains("pubTopics")) sensor.pubTopics = sv
+                        if (sk.contains("subTopics")) sensor.subTopics = sv
                     }
 
                     def parentName = components.find { it.key == sensor.connect }?.value
@@ -158,7 +160,8 @@ class GraphProducer {
                         newSensor.connect(parentName, 1, SpeedUnit.Mb, 10)
                         newSensor.destAddress = sensor.destAddress
                         newSensor.freq = sensor.freq
-                        newSensor.topics = sensor.topics
+                        newSensor.pubTopics = sensor.pubTopics
+                        newSensor.subTopics = sensor.subTopics
 
                         varList.put(sensor.name, newSensor)
                     }

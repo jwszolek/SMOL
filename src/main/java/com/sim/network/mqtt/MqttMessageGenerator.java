@@ -15,22 +15,22 @@ public class MqttMessageGenerator extends ExternalEvent {
     private MqttAdapter mqttBroker;
 
     private double scheduleValue;
-    private String[] topics;
+    private String[] pubTopics;
 
-    public MqttMessageGenerator(Model owner, String name, boolean showInTrace, MqttAdapter mqttBroker, double scheduleValue, String topics) {
-        super(owner, name, showInTrace);
+    public MqttMessageGenerator(Model owner, String name, MqttAdapter mqttBroker, double scheduleValue, String pubTopics) {
+        super(owner, name, true);
         this.mqttBroker = mqttBroker;
         this.scheduleValue = scheduleValue;
-        this.topics = (topics != null) ? topics.split(",") : new String[0];
+        this.pubTopics = (pubTopics != null) ? pubTopics.split(",") : new String[0];
     }
 
     @Override
     public void eventRoutine() {
-        if (topics.length > 0) {
+        if (pubTopics.length > 0) {
             NetworkModel model = (NetworkModel) getModel();
-            int randValue = 1 + (int) (Math.random() * topics.length);
+            int randValue = 1 + (int) (Math.random() * pubTopics.length);
 
-            MqttMessage msg = new MqttMessage(model, topics[randValue]);
+            MqttMessage msg = new MqttMessage(model, pubTopics[randValue - 1]);
             sendTraceNote(msg.getName() + " Created");
 
             MqttConverterEvent converter = new MqttConverterEvent(model, mqttBroker);

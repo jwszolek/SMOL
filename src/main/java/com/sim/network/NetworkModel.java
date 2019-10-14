@@ -92,102 +92,95 @@ public class NetworkModel extends Model {
         Map<String, EthAdapter> adaptesLst = new HashMap<>();
         Map<String, Object> convertersLst = new HashMap<>();
 
-        if (adapters != null) {
-            for (Object o : adapters.entrySet()) {
-                Map.Entry pair = (Map.Entry) o;
-                String name = pair.getKey().toString();
+        for (Object o : adapters.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            String name = pair.getKey().toString();
 
-//                log.error("Name: " + name);
+            TNode adapter = ((Map<TNode, String>) pair.getValue()).keySet().stream().findFirst().get();
+            EthAdapter ethAdapter = new EthAdapter(this, name, true, adapter.ip);
+            ethAdapter.schedule(new TimeSpan(0));
+            sendTraceNote("EthAdapter has been created " + ethAdapter.getName());
 
-                TNode adapter = ((Map<TNode, String>) pair.getValue()).keySet().stream().findFirst().get();
-                EthAdapter ethAdapter = new EthAdapter(this, name, true, adapter.ip);
-                ethAdapter.schedule(new TimeSpan(0));
-                sendTraceNote("EthAdapter has been created " + ethAdapter.getName());
-
-                adaptesLst.put(name, ethAdapter);
-                ethAdapterList.add(ethAdapter);
-            }
+            adaptesLst.put(name, ethAdapter);
+            ethAdapterList.add(ethAdapter);
         }
 
-        if (converters != null) {
-            for (Object o : converters.entrySet()) {
-                Map.Entry pair = (Map.Entry) o;
-                String name = pair.getKey().toString();
+        for (Object o : converters.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            String name = pair.getKey().toString();
 
-                ExpNode converterObj = ((Map<ExpNode, String>) pair.getValue()).keySet().stream().findFirst().get();
-                String converterConnectedTo = ((Map<ExpNode, String>) pair.getValue()).values().stream().findFirst().get();
+            ExpNode converterObj = ((Map<ExpNode, String>) pair.getValue()).keySet().stream().findFirst().get();
+            String converterConnectedTo = ((Map<ExpNode, String>) pair.getValue()).values().stream().findFirst().get();
 
-                Map<String, EthAdapter> adapterInfo = adaptesLst.entrySet().stream().filter(x -> converterConnectedTo.equals(x.getKey()))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            Map<String, EthAdapter> adapterInfo = adaptesLst.entrySet().stream().filter(x -> converterConnectedTo.equals(x.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-                if (!adapterInfo.isEmpty()) {
-                    switch (converterObj.model) {
-                        case "rs232":
-                            RS232Adapter rs232Converter = new RS232Adapter(this, name, false, adapterInfo.values().stream().findFirst().get());
-                            rs232Converter.schedule(new TimeSpan(0));
-                            convertersLst.put(name, rs232Converter);
-                            sendTraceNote("RS232Adapter has been created " + rs232Converter.getName());
+            if (!adapterInfo.isEmpty()) {
+                switch (converterObj.model) {
+                    case "rs232":
+                        RS232Adapter rs232Converter = new RS232Adapter(this, name, false, adapterInfo.values().stream().findFirst().get());
+                        rs232Converter.schedule(new TimeSpan(0));
+                        convertersLst.put(name, rs232Converter);
+                        sendTraceNote("RS232Adapter has been created " + rs232Converter.getName());
 
-                            break;
-                        case "bacnet":
-                            BacnetAdapter bacnetConverter = new BacnetAdapter(this, name, false, adapterInfo.values().stream().findFirst().get());
-                            bacnetConverter.schedule(new TimeSpan(0));
-                            convertersLst.put(name, bacnetConverter);
-                            sendTraceNote("BacnetAdapter has been created " + bacnetConverter.getName());
-                            break;
-                        case "mqtt":
-                            MqttAdapter mqttAdapter = new MqttAdapter(this, name, false, adapterInfo.values().stream().findFirst().get(), new HashMap<>());
-                            mqttAdapter.schedule(new TimeSpan(0));
-                            convertersLst.put(name, mqttAdapter);
-                            sendTraceNote("MqttAdapter has been created " + mqttAdapter.getName());
-
-//                            log.error("Adapter: " + mqttAdapter.getName());
-                            break;
-                    }
+                        break;
+                    case "bacnet":
+                        BacnetAdapter bacnetConverter = new BacnetAdapter(this, name, false, adapterInfo.values().stream().findFirst().get());
+                        bacnetConverter.schedule(new TimeSpan(0));
+                        convertersLst.put(name, bacnetConverter);
+                        sendTraceNote("BacnetAdapter has been created " + bacnetConverter.getName());
+                        break;
+                    case "mqtt":
+                        MqttAdapter mqttAdapter = new MqttAdapter(this, name, false, adapterInfo.values().stream().findFirst().get());
+                        mqttAdapter.schedule(new TimeSpan(0));
+                        convertersLst.put(name, mqttAdapter);
+                        sendTraceNote("MqttAdapter has been created " + mqttAdapter.getName());
+                        break;
                 }
             }
         }
 
-        if (sensors != null) {
-            for (Object o : sensors.entrySet()) {
-                Map.Entry pair = (Map.Entry) o;
-                String name = pair.getKey().toString();
+        for (Object o : sensors.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            String name = pair.getKey().toString();
 
-                SANode sensorObj = ((Map<SANode, String>) pair.getValue()).keySet().stream().findFirst().get();
-                String sensorConnectedTo = ((Map<SANode, String>) pair.getValue()).values().stream().findFirst().get();
+            SANode sensorObj = ((Map<SANode, String>) pair.getValue()).keySet().stream().findFirst().get();
+            String sensorConnectedTo = ((Map<SANode, String>) pair.getValue()).values().stream().findFirst().get();
 
-                Map<String, EthAdapter> adapterInfo = adaptesLst.entrySet().stream().filter(x -> sensorConnectedTo.equals(x.getKey()))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            Map<String, EthAdapter> adapterInfo = adaptesLst.entrySet().stream().filter(x -> sensorConnectedTo.equals(x.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 
-                if (!adapterInfo.isEmpty()) {
-                    TCPMessageGenerator msgGenerator = new TCPMessageGenerator(this, name, false,
-                            adapterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
-                    msgGenerator.schedule(new TimeSpan(0));
-                }
+            if (!adapterInfo.isEmpty()) {
+                TCPMessageGenerator msgGenerator = new TCPMessageGenerator(this, name, false,
+                        adapterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
+                msgGenerator.schedule(new TimeSpan(0));
+            }
 
-                Map<String, Object> converterInfo = convertersLst.entrySet().stream().filter(x -> sensorConnectedTo.equals(x.getKey()))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            Map<String, Object> converterInfo = convertersLst.entrySet().stream().filter(x -> sensorConnectedTo.equals(x.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-                if (!converterInfo.isEmpty()) {
+            if (!converterInfo.isEmpty()) {
+                if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof RS232Adapter) {
+                    RS232MessageGenerator rs232MessageGenerator = new RS232MessageGenerator(this, name, true,
+                            (RS232Adapter) converterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
+                    rs232MessageGenerator.schedule(new TimeSpan(0));
+                    sendTraceNote("RS232 sensor has been created " + rs232MessageGenerator.getName());
+                } else if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof BacnetAdapter) {
+                    BacnetMessageGenerator bacnetMsgGenerator = new BacnetMessageGenerator(this, name, true,
+                            (BacnetAdapter) converterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
+                    bacnetMsgGenerator.schedule(new TimeSpan(0));
+                    sendTraceNote("Bacnet sensor has been created " + bacnetMsgGenerator.getName());
+                } else if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof MqttAdapter) {
+                    MqttAdapter mqttAdapter = (MqttAdapter) converterInfo.values().stream().findFirst().get();
+                    MqttMessageGenerator mqttMsgGenerator = new MqttMessageGenerator(this, name, mqttAdapter, sensorObj.freq, sensorObj.pubTopics);
 
-                    if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof RS232Adapter) {
-                        RS232MessageGenerator rs232MessageGenerator = new RS232MessageGenerator(this, name, true,
-                                (RS232Adapter) converterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
-                        rs232MessageGenerator.schedule(new TimeSpan(0));
-                        sendTraceNote("RS232 sensor has been created " + rs232MessageGenerator.getName());
-                    } else if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof BacnetAdapter) {
-                        BacnetMessageGenerator bacnetMsgGenerator = new BacnetMessageGenerator(this, name, true,
-                                (BacnetAdapter) converterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
-                        bacnetMsgGenerator.schedule(new TimeSpan(0));
-                        sendTraceNote("Bacnet sensor has been created " + bacnetMsgGenerator.getName());
-                    } else if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof MqttAdapter) {
-                        MqttMessageGenerator mqttMsgGenerator = new MqttMessageGenerator(this, name, true,
-                                (MqttAdapter) converterInfo.values().stream().findFirst().get(), sensorObj.freq, sensorObj.topics);
-                        mqttMsgGenerator.schedule(new TimeSpan(0));
-                        sendTraceNote("Mqtt sensor has been created " + mqttMsgGenerator.getName());
-                        log.error("Created: " + sensorObj.topics);
+                    if (sensorObj.subTopics != null) {
+                        log.error("Subscribe: " + sensorObj.subTopics);
+                        mqttAdapter.subscribe(mqttMsgGenerator, sensorObj.subTopics);
                     }
+                    mqttMsgGenerator.schedule(new TimeSpan(0));
+                    sendTraceNote("Mqtt sensor has been created " + mqttMsgGenerator.getName());
                 }
             }
         }

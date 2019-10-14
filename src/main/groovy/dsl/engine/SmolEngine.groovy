@@ -9,20 +9,20 @@ class SmolConfiguration extends ArrayList<String> {
 class SmolConfigurationDsl {
     private final SmolConfiguration configItem
 
-    SmolConfigurationDsl(SmolConfiguration item){
+    SmolConfigurationDsl(SmolConfiguration item) {
         this.configItem = item
         configItem << "'type':'adapter'"
     }
 
-    def ip(String ip){
+    def ip(String ip) {
         configItem << "'ip':'${ip}'"
     }
 
-    def generator_connected(String generator){
+    def generator_connected(String generator) {
         configItem << "'generator':'${generator}'"
     }
 
-    def dst(String dst){
+    def dst(String dst) {
         configItem << "'dst':'${dst}'"
     }
 }
@@ -31,20 +31,20 @@ class SmolConfigurationDsl {
 class TransferringConfigurationDsl {
     private final SmolConfiguration configItem
 
-    TransferringConfigurationDsl(SmolConfiguration item){
+    TransferringConfigurationDsl(SmolConfiguration item) {
         this.configItem = item
         configItem << "'type':'adapter'"
     }
 
-    def ip(String ip){
+    def ip(String ip) {
         configItem << "'ip':'${ip}'"
     }
 
-    def generator_connected(String generator){
+    def generator_connected(String generator) {
         configItem << "'generator':'${generator}'"
     }
 
-    def dst(String dst){
+    def dst(String dst) {
         configItem << "'dst':'${dst}'"
     }
 }
@@ -53,16 +53,16 @@ class TransferringConfigurationDsl {
 class ConverterConfigurationDsl {
     private final SmolConfiguration configItem
 
-    ConverterConfigurationDsl(SmolConfiguration item){
+    ConverterConfigurationDsl(SmolConfiguration item) {
         this.configItem = item
         configItem << "'type':'converter'"
     }
 
-    def connect(String converter){
+    def connect(String converter) {
         configItem << "'connect':'${converter}'"
     }
 
-    def model(String model){
+    def model(String model) {
         configItem << "'model':'${model}'"
     }
 }
@@ -70,37 +70,41 @@ class ConverterConfigurationDsl {
 class SensorConfigurationDsl {
     private final SmolConfiguration configItem
 
-    SensorConfigurationDsl(SmolConfiguration item){
+    SensorConfigurationDsl(SmolConfiguration item) {
         this.configItem = item
         configItem << "'type':'sensor'"
     }
 
-    def connect(String connect){
+    def connect(String connect) {
         configItem << "'connect':'${connect}'"
     }
 
-    def destAddress(String destAddress){
+    def destAddress(String destAddress) {
         configItem << "'destAddress':'${destAddress}'"
     }
 
-    def freq(String freq){
+    def freq(String freq) {
         configItem << "'freq':'${freq}'"
     }
 
-    def topics(String topics){
-        configItem << "'topics':'${topics}'"
+    def pubTopics(String pubTopics) {
+        configItem << "'pubTopics':'${pubTopics}'"
+    }
+
+    def subTopics(String subTopics) {
+        configItem << "'subTopics':'${subTopics}'"
     }
 }
 
 class MapConfigurationDsl {
     private final SmolConfiguration configItem
 
-    MapConfigurationDsl(SmolConfiguration item){
+    MapConfigurationDsl(SmolConfiguration item) {
         this.configItem = item
         configItem << "map"
     }
 
-    def fullmap(String dev){
+    def fullmap(String dev) {
         configItem << dev
     }
 }
@@ -108,16 +112,16 @@ class MapConfigurationDsl {
 class ActionConfigurationDsl {
     private final SmolConfiguration configItem
 
-    ActionConfigurationDsl(SmolConfiguration item){
+    ActionConfigurationDsl(SmolConfiguration item) {
         this.configItem = item
         configItem << "'type':'action'"
     }
 
-    def fullmap(String dev){
+    def fullmap(String dev) {
         configItem << "'fullmap':'${dev}'"
     }
 
-    def stop(String dev){
+    def stop(String dev) {
         configItem << "'stop':'${dev}'"
     }
 }
@@ -134,20 +138,20 @@ class RootConfiguration {
 class RootConfigurationDsl {
     private final RootConfiguration rootConfig
 
-    RootConfigurationDsl(RootConfiguration root){
+    RootConfigurationDsl(RootConfiguration root) {
         this.rootConfig = root
     }
 
-    def getSim(){
+    def getSim() {
 
     }
 
     //BEGIN of new naming convention
 
-    SmolConfiguration tn(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = TransferringConfigurationDsl) Closure script){
+    SmolConfiguration tn(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = TransferringConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -157,10 +161,10 @@ class RootConfigurationDsl {
         return smol
     }
 
-    SmolConfiguration expander(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ConverterConfigurationDsl) Closure script){
+    SmolConfiguration expander(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ConverterConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -171,10 +175,10 @@ class RootConfigurationDsl {
     }
 
 
-    SmolConfiguration san(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SensorConfigurationDsl) Closure script){
+    SmolConfiguration san(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SensorConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -188,10 +192,10 @@ class RootConfigurationDsl {
     //END of  new naming convention
 
 
-    SmolConfiguration adapter(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SmolConfigurationDsl) Closure script){
+    SmolConfiguration adapter(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SmolConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -201,10 +205,10 @@ class RootConfigurationDsl {
         return smol
     }
 
-    SmolConfiguration converter(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ConverterConfigurationDsl) Closure script){
+    SmolConfiguration converter(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ConverterConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -214,10 +218,10 @@ class RootConfigurationDsl {
         return smol
     }
 
-    SmolConfiguration sensor(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SensorConfigurationDsl) Closure script){
+    SmolConfiguration sensor(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = SensorConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -227,10 +231,10 @@ class RootConfigurationDsl {
         return smol
     }
 
-    SmolConfiguration map(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = MapConfigurationDsl) Closure script){
+    SmolConfiguration map(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = MapConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -240,10 +244,10 @@ class RootConfigurationDsl {
         return smol
     }
 
-    SmolConfiguration action(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ActionConfigurationDsl) Closure script){
+    SmolConfiguration action(String name, @DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = ActionConfigurationDsl) Closure script) {
         def smol = rootConfig.catalog[name]
 
-        if(smol == null) {
+        if (smol == null) {
             smol = rootConfig.catalog[name] = new SmolConfiguration()
         }
 
@@ -254,12 +258,10 @@ class RootConfigurationDsl {
     }
 
 
-
-
 }
 
 class Root {
-    static RootConfiguration create(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RootConfigurationDsl) Closure script){
+    static RootConfiguration create(@DelegatesTo(strategy = Closure.DELEGATE_FIRST, value = RootConfigurationDsl) Closure script) {
         def root = new RootConfiguration()
 
         script.resolveStrategy = Closure.DELEGATE_FIRST
@@ -272,40 +274,40 @@ class Root {
 
 
 def network = Root.create {
-        adapter "eth1", {
-            ip "1"
-            generator_connected "true"
-            dst "Server"
-        }
+    adapter "eth1", {
+        ip "1"
+        generator_connected "true"
+        dst "Server"
+    }
 
-        //comment test
-        adapter "Server", {
-            ip "2"
-        }
+    //comment test
+    adapter "Server", {
+        ip "2"
+    }
 
-        adapter "eth3", {
-            ip "3"
-        }
+    adapter "eth3", {
+        ip "3"
+    }
 
-        adapter "eth4", {
-            ip "4"
-        }
+    adapter "eth4", {
+        ip "4"
+    }
 
-        converter "rs485", {
-            connect "eth4"
-        }
+    converter "rs485", {
+        connect "eth4"
+    }
 
-        sensor "temperature1", {
-            connect "eth3"
-        }
+    sensor "temperature1", {
+        connect "eth3"
+    }
 
-        sensor "temperature2", {
-            connect "rs485"
-        }
+    sensor "temperature2", {
+        connect "rs485"
+    }
 
-        map "network-map", {
-            fullmap "true"
-        }
+    map "network-map", {
+        fullmap "true"
+    }
 
 }
 
@@ -337,7 +339,7 @@ def testNetwork = Root.create {
  * Set destination IP or name
  */
     converter "rs485", {
-        connect"Server"
+        connect "Server"
     }
 
 /*
@@ -358,7 +360,6 @@ def testNetwork = Root.create {
     }
 
 }
-
 
 
 //new GraphProducer().build(testNetwork)

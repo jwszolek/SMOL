@@ -6,7 +6,8 @@ class SANode extends HBase {
 
 	public String destAddress
 	public double freq
-	public String topics
+	public String pubTopics
+	public String subTopics
 
 	public SANode(String caption)
 	{
