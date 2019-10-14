@@ -2,31 +2,23 @@ package main.java.com.sim.network.mqtt;
 
 import desmoj.core.simulator.Event;
 import desmoj.core.simulator.Model;
-import desmoj.core.simulator.Queue;
-import main.java.com.sim.network.NetworkModel;
-import main.java.com.sim.network.TCPMessage;
 
 public class MqttConverterEvent extends Event<MqttMessage> {
-    private MqttMessage receivedMsg;
-    private MqttAdapter mqttAdapter;
+    private MqttAdapter mqttBroker;
 
-    MqttConverterEvent(Model owner, String name, boolean showInTrace, MqttAdapter mqttAdapter) {
-        super(owner, name, showInTrace);
-        this.mqttAdapter = mqttAdapter;
+    MqttConverterEvent(Model owner, MqttAdapter mqttBroker) {
+        super(owner, "Mqtt Converter Event", true);
+        this.mqttBroker = mqttBroker;
     }
 
     @Override
     public void eventRoutine(MqttMessage mqttMessage) {
-        NetworkModel model = (NetworkModel) getModel();
+        mqttBroker.getSubscribers(mqttMessage.getTopic()).forEach(mqttClient ->
+        {
+            mqttMessage.setSrcAddress(mqttBroker.getEthAdapter().getAdapterAddress());
+            mqttMessage.setDstAddress(mqttClient.getMqttBroker().getEthAdapter().getAdapterAddress());
 
-        TCPMessage tcpMessage = new TCPMessage(model, "Mqtt To TCP", true);
-        tcpMessage.setSrcAddress(getName());
-//        tcpMessage.setSrcAddress(mqttAdapter.getEthAdapter().getAdapterAddress());
-        tcpMessage.setDstAddress(mqttMessage.getDstTopic());
-
-        Queue<TCPMessage> queue = mqttAdapter.getInMqttAdapterQueue();
-        if (queue != null) {
-            queue.insert(tcpMessage);
-        }
+            mqttBroker.getInMqttAdapterQueue().insert(mqttMessage);
+        });
     }
 }

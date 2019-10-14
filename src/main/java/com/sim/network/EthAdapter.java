@@ -1,16 +1,17 @@
 package main.java.com.sim.network;
 
 
-
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
 import desmoj.core.simulator.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class EthAdapter extends ExternalEvent {
 
     protected Queue<EthFrame> inAdapterQueue;
@@ -25,9 +26,11 @@ public class EthAdapter extends ExternalEvent {
     public String getAdapterAddress() {
         return adapterAddress;
     }
+
     public boolean isCollisionDetected() {
         return collisionDetected;
     }
+
     public void setCollisionDetected(boolean collisionDetected) {
         this.collisionDetected = collisionDetected;
     }
@@ -35,10 +38,10 @@ public class EthAdapter extends ExternalEvent {
 
     public EthAdapter(Model owner, String name, boolean showInTrace, String address) {
         super(owner, name, showInTrace);
-        inAdapterQueue = new Queue<EthFrame>(owner,"in-adapterQueue-"+address,true,true);
-        outAdapterQueue = new Queue<EthFrame>(owner,"out-adapterQueue-"+address,true,true);
-        inMsgQueue = new Queue<TCPMessage>(owner, "in-messageQueue-"+address, true, true);
-        outMsgQueue = new Queue<TCPMessage>(owner, "out-messageQueue-"+address, true, true);
+        inAdapterQueue = new Queue<EthFrame>(owner, "in-adapterQueue-" + address, true, true);
+        outAdapterQueue = new Queue<EthFrame>(owner, "out-adapterQueue-" + address, true, true);
+        inMsgQueue = new Queue<TCPMessage>(owner, "in-messageQueue-" + address, true, true);
+        outMsgQueue = new Queue<TCPMessage>(owner, "out-messageQueue-" + address, true, true);
         this.adapterAddress = address;
     }
 
@@ -46,10 +49,18 @@ public class EthAdapter extends ExternalEvent {
     public void eventRoutine() {
         NetworkModel model = (NetworkModel) getModel();
 
-        if(!this.collisionDetected) {
+        if (!inMsgQueue.isEmpty()) {
+            TCPMessage message = inMsgQueue.first();
+
+            inMsgQueue.remove(message);
+            log.error("Received (" + getName() + "/" + adapterAddress + "): " + message);
+        }
+
+        if (!this.collisionDetected) {
             if (!outMsgQueue.isEmpty()) {
 
                 TCPMessage tcpMessage = outMsgQueue.first();
+
                 outMsgQueue.remove(tcpMessage);
 
                 EthAdapter adapter = null;
@@ -82,9 +93,11 @@ public class EthAdapter extends ExternalEvent {
             sendTraceNote("FRAME-STOP " + inFrame.getName());
             inFrame.getTcpMessage().setStopTransmission(presentTime());
 
-            sendTraceNote("TCPMSG-LEFT-TIME|"+inFrame.getTcpMessage().getTransmissionTime().toString()+"|"+inFrame.adapter.getName());
+            sendTraceNote("TCPMSG-LEFT-TIME|" + inFrame.getTcpMessage().getTransmissionTime().toString() + "|" + inFrame.adapter.getName());
 
-            TCPMessage inTCPMessage = new TCPMessage(model, "IN-TCP-Message", true);
+            TCPMessage inTCPMessage = inFrame.getTcpMessage();
+            inTCPMessage.rename("IN-TCP-Message");
+
             inMsgQueue.insert(inTCPMessage);
         }
 

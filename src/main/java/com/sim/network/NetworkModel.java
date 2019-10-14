@@ -4,6 +4,7 @@ import desmoj.core.dist.ContDistUniform;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.Queue;
 import desmoj.core.simulator.TimeSpan;
+import lombok.extern.slf4j.Slf4j;
 import main.groovy.smoh.ExpNode;
 import main.groovy.smoh.HBase;
 import main.groovy.smoh.SANode;
@@ -18,6 +19,7 @@ import main.java.com.sim.network.rs232.RS232MessageGenerator;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class NetworkModel extends Model {
     private ContDistUniform randCollisionValue;
 
@@ -95,6 +97,8 @@ public class NetworkModel extends Model {
                 Map.Entry pair = (Map.Entry) o;
                 String name = pair.getKey().toString();
 
+//                log.error("Name: " + name);
+
                 TNode adapter = ((Map<TNode, String>) pair.getValue()).keySet().stream().findFirst().get();
                 EthAdapter ethAdapter = new EthAdapter(this, name, true, adapter.ip);
                 ethAdapter.schedule(new TimeSpan(0));
@@ -132,10 +136,12 @@ public class NetworkModel extends Model {
                             sendTraceNote("BacnetAdapter has been created " + bacnetConverter.getName());
                             break;
                         case "mqtt":
-                            MqttAdapter mqttAdapter = new MqttAdapter(this, name, false, adapterInfo.values().stream().findFirst().get());
+                            MqttAdapter mqttAdapter = new MqttAdapter(this, name, false, adapterInfo.values().stream().findFirst().get(), new HashMap<>());
                             mqttAdapter.schedule(new TimeSpan(0));
                             convertersLst.put(name, mqttAdapter);
                             sendTraceNote("MqttAdapter has been created " + mqttAdapter.getName());
+
+//                            log.error("Adapter: " + mqttAdapter.getName());
                             break;
                     }
                 }
@@ -177,9 +183,10 @@ public class NetworkModel extends Model {
                         sendTraceNote("Bacnet sensor has been created " + bacnetMsgGenerator.getName());
                     } else if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof MqttAdapter) {
                         MqttMessageGenerator mqttMsgGenerator = new MqttMessageGenerator(this, name, true,
-                                (MqttAdapter) converterInfo.values().stream().findFirst().get(), sensorObj.destAddress, sensorObj.freq);
+                                (MqttAdapter) converterInfo.values().stream().findFirst().get(), sensorObj.freq, new ArrayList<>());
                         mqttMsgGenerator.schedule(new TimeSpan(0));
                         sendTraceNote("Mqtt sensor has been created " + mqttMsgGenerator.getName());
+//                        log.error("Created: " + mqttMsgGenerator.getName());
                     }
                 }
             }

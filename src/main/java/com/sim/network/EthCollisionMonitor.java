@@ -5,11 +5,13 @@ import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeInstant;
 import desmoj.core.simulator.TimeSpan;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class EthCollisionMonitor extends ExternalEvent {
 
     public EthCollisionMonitor(Model owner, String name, boolean showInTrace, List<EthAdapter> adapters) {

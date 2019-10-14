@@ -4,9 +4,10 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.Event;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
-
+@Slf4j
 public class ReleaseIFGEvent extends Event<EthFrame> {
 
     private  EthLinkRouter ethLinkRouter = null;
