@@ -7,11 +7,12 @@ import desmoj.core.simulator.TimeSpan;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
+
 @Slf4j
 public class ReleaseIFGEvent extends Event<EthFrame> {
 
-    private  EthLinkRouter ethLinkRouter = null;
-    private  EthAdapter ethAdapter = null;
+    private EthLinkRouter ethLinkRouter = null;
+    private EthAdapter ethAdapter = null;
 
     public ReleaseIFGEvent(Model owner, String name, boolean showInTrace, EthLinkRouter router, EthAdapter adapter) {
         super(owner, name, showInTrace);
@@ -22,16 +23,15 @@ public class ReleaseIFGEvent extends Event<EthFrame> {
     @Override
     public void eventRoutine(EthFrame ethFrame) throws SuspendExecution {
 
-        NetworkModel model = (NetworkModel)getModel();
+        NetworkModel model = (NetworkModel) getModel();
         model.ethLink.remove(ethFrame);
 
-        sendTraceNote("ETHLINK-LEFT-"+ethFrame.adapter.getName());
+        sendTraceNote("ETHLINK-LEFT-" + ethFrame.adapter.getName());
         ethFrame.setStopTransmission(presentTime());
 
         if (this.ethAdapter != null) {
             this.ethAdapter.inAdapterQueue.insert(ethFrame);
         }
-
 
         this.ethLinkRouter.setInterframeGap(false);
         this.ethLinkRouter.schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));

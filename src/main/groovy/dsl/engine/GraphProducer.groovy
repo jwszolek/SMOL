@@ -21,6 +21,7 @@ class Adapter {
     String ip
     String generator
     String dst
+    String bridge
 }
 
 
@@ -37,6 +38,7 @@ class Converter {
     String name
     String connect
     String model
+    String bridge
 }
 
 class GraphProducer {
@@ -96,6 +98,7 @@ class GraphProducer {
                     if (ak.contains("ip")) adapter.ip = av
                     if (ak.contains("generator")) adapter.generator = av
                     if (ak.contains("dst")) adapter.dst = av
+                    if (ak.contains("bridge")) adapter.bridge = av
                 }
 
                 def newAdapter = new TNode(adapter.name, adapter.ip)
@@ -120,16 +123,18 @@ class GraphProducer {
                     valueMap.each { ck, cv ->
                         if (ck.contains("connect")) converter.connect = cv
                         if (ck.contains("model")) converter.model = cv
+                        if (ck.contains("bridge")) converter.bridge = cv
                     }
 
                     def parentName = components.find { it.key == converter.connect }?.value
 
                     if (parentName) {
                         def newConverter = new ExpNode(converter.name)
+                        newConverter.bridge = converter.bridge
                         newConverter.model = converter.model
                         newConverter.connect(parentName, 1, SpeedUnit.Mb, 10)
-                        varList.put(converter.name, newConverter)
 
+                        varList.put(converter.name, newConverter)
                         components.put(converter.name, newConverter)
                     }
                 }

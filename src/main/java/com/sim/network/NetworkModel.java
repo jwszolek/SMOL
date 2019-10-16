@@ -131,7 +131,8 @@ public class NetworkModel extends Model {
                         sendTraceNote("BacnetAdapter has been created " + bacnetConverter.getName());
                         break;
                     case "mqtt":
-                        MqttAdapter mqttAdapter = new MqttAdapter(this, name, false, adapterInfo.values().stream().findFirst().get());
+                        MqttAdapter mqttAdapter = new MqttAdapter(this, name, false, adapterInfo.values().stream().findFirst().get(), converterObj.bridge);
+
                         mqttAdapter.schedule(new TimeSpan(0));
                         convertersLst.put(name, mqttAdapter);
                         sendTraceNote("MqttAdapter has been created " + mqttAdapter.getName());
@@ -176,8 +177,13 @@ public class NetworkModel extends Model {
                     MqttMessageGenerator mqttMsgGenerator = new MqttMessageGenerator(this, name, mqttAdapter, sensorObj.freq, sensorObj.pubTopics);
 
                     if (sensorObj.subTopics != null) {
-                        log.error("Subscribe: " + sensorObj.subTopics);
                         mqttAdapter.subscribe(mqttMsgGenerator, sensorObj.subTopics);
+
+                        if (mqttAdapter.getBridges().length > 0) {
+                            Arrays.stream(mqttAdapter.getBridges()).forEach(bridge -> convertersLst.values().stream()
+                                    .filter(adapter -> ((MqttAdapter) adapter).getEthAdapter().getAdapterAddress().equals(bridge))
+                                    .forEach(adapter -> ((MqttAdapter) adapter).subscribe(mqttMsgGenerator, sensorObj.subTopics)));
+                        }
                     }
                     mqttMsgGenerator.schedule(new TimeSpan(0));
                     sendTraceNote("Mqtt sensor has been created " + mqttMsgGenerator.getName());

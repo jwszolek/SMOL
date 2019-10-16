@@ -65,6 +65,10 @@ class ConverterConfigurationDsl {
     def model(String model) {
         configItem << "'model':'${model}'"
     }
+
+    def bridge(String bridge) {
+        configItem << "'bridge':'${bridge}'"
+    }
 }
 
 class SensorConfigurationDsl {

@@ -26,7 +26,10 @@ public class MqttAdapter extends ExternalEvent {
     @Getter
     private final Map<String, List<MqttMessageGenerator>> subscribers;
 
-    public MqttAdapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter) {
+    @Getter
+    private final String[] bridges;
+
+    public MqttAdapter(Model owner, String name, boolean showInTrace, EthAdapter ethAdapter, String bridges) {
         super(owner, name, showInTrace);
 
         this.inMqttAdapterQueue = new Queue<>(owner, "in-mqtt-adapterQueue-", true, true);
@@ -34,6 +37,8 @@ public class MqttAdapter extends ExternalEvent {
 
         this.ethAdapter = ethAdapter;
         this.subscribers = new HashMap<>();
+
+        this.bridges = (bridges != null) ? bridges.split(",") : new String[0];
     }
 
     public void subscribe(MqttMessageGenerator mqttClient, String subTopics) {
@@ -51,6 +56,14 @@ public class MqttAdapter extends ExternalEvent {
 
     @Override
     public void eventRoutine() {
+        if (!ethAdapter.getInMsgQueue().isEmpty()) {
+            TCPMessage message = ethAdapter.getInMsgQueue().first();
+
+            ethAdapter.getInMsgQueue().remove(message);
+            log.error("Received (" + getName() + " | " + ethAdapter.getAdapterAddress() + "): " + message);
+        }
+
+
         if (!outMqttAdapterQueue.isEmpty()) {
             log.error("MqttAdapter: outMqttAdapterQueue not empty !!!");
         }
@@ -59,14 +72,14 @@ public class MqttAdapter extends ExternalEvent {
             TCPMessage mqttMessage = inMqttAdapterQueue.first();
             inMqttAdapterQueue.remove(mqttMessage);
 
-            log.error("Sent: (" + getName() + "/" + ethAdapter.getAdapterAddress() + "): " + mqttMessage.toString());
-            ethAdapter.outMsgQueue.insert(mqttMessage);
+            log.error("Sent (" + getName() + " | " + ethAdapter.getAdapterAddress() + "): " + mqttMessage.toString());
+            ethAdapter.getOutMsgQueue().insert(mqttMessage);
         }
 
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
     }
 
-    Map<String, List<MqttMessageGenerator>> getSubscribers(){
+    Map<String, List<MqttMessageGenerator>> getSubscribers() {
         return subscribers;
     }
 

@@ -5,6 +5,8 @@ import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
 import desmoj.core.simulator.*;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -13,48 +15,35 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class EthAdapter extends ExternalEvent {
+    @Getter
+    private Queue<TCPMessage> inMsgQueue;
 
-    protected Queue<EthFrame> inAdapterQueue;
-    protected Queue<EthFrame> outAdapterQueue;
-    protected Queue<TCPMessage> inMsgQueue;
-    public Queue<TCPMessage> outMsgQueue;
-    private String adapterAddress;
+    @Getter
+    private Queue<TCPMessage> outMsgQueue;
+
+    @Getter
+    @Setter
     private boolean collisionDetected = false;
-    private boolean transmits = false;
 
+    @Getter
+    private String adapterAddress;
 
-    public String getAdapterAddress() {
-        return adapterAddress;
-    }
-
-    public boolean isCollisionDetected() {
-        return collisionDetected;
-    }
-
-    public void setCollisionDetected(boolean collisionDetected) {
-        this.collisionDetected = collisionDetected;
-    }
-
+    Queue<EthFrame> inAdapterQueue;
+    Queue<EthFrame> outAdapterQueue;
 
     public EthAdapter(Model owner, String name, boolean showInTrace, String address) {
         super(owner, name, showInTrace);
-        inAdapterQueue = new Queue<EthFrame>(owner, "in-adapterQueue-" + address, true, true);
-        outAdapterQueue = new Queue<EthFrame>(owner, "out-adapterQueue-" + address, true, true);
-        inMsgQueue = new Queue<TCPMessage>(owner, "in-messageQueue-" + address, true, true);
-        outMsgQueue = new Queue<TCPMessage>(owner, "out-messageQueue-" + address, true, true);
+
+        this.inAdapterQueue = new Queue<>(owner, "in-adapterQueue-" + address, true, true);
+        this.outAdapterQueue = new Queue<>(owner, "out-adapterQueue-" + address, true, true);
+        this.inMsgQueue = new Queue<>(owner, "in-messageQueue-" + address, true, true);
+        this.outMsgQueue = new Queue<>(owner, "out-messageQueue-" + address, true, true);
         this.adapterAddress = address;
     }
 
     @Override
     public void eventRoutine() {
         NetworkModel model = (NetworkModel) getModel();
-
-        if (!inMsgQueue.isEmpty()) {
-            TCPMessage message = inMsgQueue.first();
-
-            inMsgQueue.remove(message);
-            log.error("Received (" + getName() + "/" + adapterAddress + "): " + message);
-        }
 
         if (!this.collisionDetected) {
             if (!outMsgQueue.isEmpty()) {
@@ -101,8 +90,6 @@ public class EthAdapter extends ExternalEvent {
             inMsgQueue.insert(inTCPMessage);
         }
 
-
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
-
     }
 }

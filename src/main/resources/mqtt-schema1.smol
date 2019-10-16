@@ -32,6 +32,7 @@ expander "mqtt-broker-3", {
 expander "mqtt-broker-4", {
     connect "eth2"
     model "mqtt"
+    bridge "4"
 }
 
 /* BROKER 4 */
@@ -176,5 +177,5 @@ action "draw", {
 }
 
 action "sim", {
-    stop "1500"
+    stop "15000"
 }
