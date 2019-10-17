@@ -15,13 +15,14 @@ public class TCPMessage extends Entity {
     private String srcAddress;
     private TimeInstant startTransmission;
     private TimeInstant stopTransmission;
+    private String data;
 
     public TCPMessage(Model owner, String name, boolean showInTrace) {
         super(owner, name, showInTrace);
         startTransmission = presentTime();
     }
 
-    public TimeInstant getTransmissionTime() {
+    TimeInstant getTransmissionTime() {
         return new TimeInstant(stopTransmission.getTimeAsDouble() - startTransmission.getTimeAsDouble());
     }
 }

@@ -174,7 +174,8 @@ public class NetworkModel extends Model {
                     sendTraceNote("Bacnet sensor has been created " + bacnetMsgGenerator.getName());
                 } else if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof MqttAdapter) {
                     MqttAdapter mqttAdapter = (MqttAdapter) converterInfo.values().stream().findFirst().get();
-                    MqttMessageGenerator mqttMsgGenerator = new MqttMessageGenerator(this, name, mqttAdapter, sensorObj.freq, sensorObj.pubTopics);
+                    MqttMessageGenerator mqttMsgGenerator
+                            = new MqttMessageGenerator(this, name, mqttAdapter, sensorObj.freq, sensorObj.pubTopics);
 
                     if (sensorObj.subTopics != null) {
                         mqttAdapter.subscribe(mqttMsgGenerator, sensorObj.subTopics);

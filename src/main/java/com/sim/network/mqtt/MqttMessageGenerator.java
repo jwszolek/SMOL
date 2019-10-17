@@ -6,6 +6,7 @@ import desmoj.core.simulator.TimeSpan;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import main.java.com.sim.network.NetworkModel;
+import main.java.com.sim.network.TCPMessage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,18 +27,32 @@ public class MqttMessageGenerator extends ExternalEvent {
 
     @Override
     public void eventRoutine() {
+        publish();
+
+        schedule(new TimeSpan(scheduleValue, TimeUnit.MILLISECONDS));
+    }
+
+    void receive(TCPMessage message) {
+        log.error("Broker -> client | " + getName() + " | " + mqttBroker.getEthAdapter().getAdapterAddress() + ": " + message);
+    }
+
+    private void publish() {
         if (pubTopics.length > 0) {
             NetworkModel model = (NetworkModel) getModel();
             int randValue = 1 + (int) (Math.random() * pubTopics.length);
 
-            MqttMessage msg = new MqttMessage(model, pubTopics[randValue - 1]);
-            sendTraceNote(msg.getName() + " Created");
+            MqttMessage mqttMessage = new MqttMessage(model, pubTopics[randValue - 1]);
+            sendTraceNote(mqttMessage.getName() + " Created");
 
-            MqttConverterEvent converter = new MqttConverterEvent(model, mqttBroker);
-            converter.schedule(msg, new TimeSpan(10, TimeUnit.MICROSECONDS));
+            mqttBroker.getSubscribersByTopic(mqttMessage.getTopic()).forEach(mqttClient ->
+            {
+                MqttConverterEvent converter =
+                        new MqttConverterEvent(model, getName(), mqttBroker, mqttClient.getMqttBroker().getEthAdapter().getAdapterAddress());
+                converter.schedule(mqttMessage, new TimeSpan(10, TimeUnit.MICROSECONDS));
+            });
+
+
         }
-
-        schedule(new TimeSpan(scheduleValue, TimeUnit.MILLISECONDS));
     }
 }
 

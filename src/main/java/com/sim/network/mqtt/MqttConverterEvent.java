@@ -6,21 +6,24 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class MqttConverterEvent extends Event<MqttMessage> {
+    private String clientId;
     private MqttAdapter mqttBroker;
+    private String dstAddress;
 
-    MqttConverterEvent(Model owner, MqttAdapter mqttBroker) {
+    MqttConverterEvent(Model owner, String clientId, MqttAdapter mqttBroker, String dstAddress) {
         super(owner, "Mqtt Converter Event", true);
+        this.clientId = clientId;
         this.mqttBroker = mqttBroker;
+
+        this.dstAddress = dstAddress;
     }
 
     @Override
     public void eventRoutine(MqttMessage mqttMessage) {
-        mqttBroker.getSubscribers(mqttMessage.getTopic()).forEach(mqttClient ->
-        {
-            mqttMessage.setSrcAddress(mqttBroker.getEthAdapter().getAdapterAddress());
-            mqttMessage.setDstAddress(mqttClient.getMqttBroker().getEthAdapter().getAdapterAddress());
+        mqttMessage.setSrcAddress(mqttBroker.getEthAdapter().getAdapterAddress());
+        mqttMessage.setDstAddress(dstAddress);
+        mqttBroker.getInMqttAdapterQueue().insert(mqttMessage);
 
-            mqttBroker.getInMqttAdapterQueue().insert(mqttMessage);
-        });
+        log.error("Client -> broker | " + clientId + " | " + mqttBroker.getEthAdapter().getAdapterAddress() + ": " + mqttMessage.toString());
     }
 }
