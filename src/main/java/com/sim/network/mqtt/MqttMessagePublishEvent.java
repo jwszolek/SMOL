@@ -22,15 +22,15 @@ public class MqttMessagePublishEvent extends MqttMessageEvent {
 
     @Override
     public void eventRoutine(TCPMessage message) {
-        TCPMessage tcpMessage = new MqttMessage(message.getModel(), message.getData());
-        tcpMessage.setStartTransmission(presentTime());
-        tcpMessage.setStopTransmission(null);
+        if (message instanceof MqttMessage) {
+            TCPMessage tcpMessage = new MqttMessage((MqttMessage) message);
+            tcpMessage.setSrcAddress(srcAddress);
+            tcpMessage.setDstAddress(dstAddress);
+            tcpMessage.setStartTransmission(presentTime());
+            tcpMessage.setStopTransmission(null);
 
-        tcpMessage.setSrcAddress(srcAddress);
-        tcpMessage.setDstAddress(dstAddress);
-
-        mqttAdapter.getInMqttAdapterQueue().insert(tcpMessage);
-
-        log.error(logInfo + " | " + mqttAdapter.getEthAdapter().getAdapterAddress() + ": " + tcpMessage.toString());
+            mqttAdapter.getInMqttAdapterQueue().insert(tcpMessage);
+            log.error(logInfo + " | " + mqttAdapter.getEthAdapter().getAdapterAddress() + ": " + tcpMessage);
+        }
     }
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import main.java.com.sim.network.TCPMessage;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -26,7 +27,7 @@ public class MqttClient extends ExternalEvent {
         this.dstAddress = dstAddress;
         this.pubTopics = (pubTopics != null) ? pubTopics.split(",") : new String[0];
 
-        lastPublishRoutine = 0;
+        lastPublishRoutine = presentTime().getTimeAsDouble(TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -49,14 +50,11 @@ public class MqttClient extends ExternalEvent {
 
     private void publishRoutine() {
         double presentTime = presentTime().getTimeAsDouble(TimeUnit.MILLISECONDS);
-        if (pubTopics.length > 0
-                && ((presentTime == 0)
-                || ((presentTime - scheduleValue) > lastPublishRoutine))
-        ) {
+        if (pubTopics.length > 0 && ((presentTime - scheduleValue) > lastPublishRoutine)) {
             lastPublishRoutine = presentTime().getTimeAsDouble(TimeUnit.MILLISECONDS);
 
             int randValue = 1 + (int) (Math.random() * pubTopics.length);
-            MqttMessage message = new MqttMessage(getModel(), pubTopics[randValue - 1]);
+            MqttMessage message = new MqttMessage(getModel(), pubTopics[randValue - 1], UUID.randomUUID());
             sendTraceNote(message.getName() + " Created");
 
             publish("Client -> broker | " + getName())

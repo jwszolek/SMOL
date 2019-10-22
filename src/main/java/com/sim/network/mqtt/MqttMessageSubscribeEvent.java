@@ -19,17 +19,21 @@ public class MqttMessageSubscribeEvent extends MqttMessageEvent {
 
     @Override
     public void eventRoutine(TCPMessage message) {
-        MqttAdapter mqttAdapter = mqttClient.getMqttAdapter();
-        if (mqttAdapter.getSubscribers().isEmpty()) mqttClient.received(message);
-        else {
-            List<MqttAdapter> adapters = mqttAdapter.getSubscribers().get(message.getData());
-            if (adapters != null) adapters.forEach(adapter ->
-                    mqttClient.publish(adapter, mqttAdapter.getEthAdapter().getAdapterAddress(), adapter.getEthAdapter().getAdapterAddress()
-                            , "Broker -> client | " + mqttClient.getName())
-                            .schedule(message, new TimeSpan(1, TimeUnit.MICROSECONDS))
-            );
-            else
-                log.error("Topic without subscribers: " + message.getData());
+        if (message instanceof MqttMessage) {
+            MqttMessage mqttMessage = (MqttMessage) message;
+
+            MqttAdapter mqttAdapter = mqttClient.getMqttAdapter();
+            if (mqttAdapter.getSubscribers().isEmpty()) mqttClient.received(message);
+            else {
+                List<MqttAdapter> adapters = mqttAdapter.getSubscribers().get(mqttMessage.topic());
+                if (adapters != null) adapters.forEach(adapter ->
+                        mqttClient.publish(adapter, mqttAdapter.getEthAdapter().getAdapterAddress(), adapter.getEthAdapter().getAdapterAddress()
+                                , "Broker -> client | " + mqttClient.getName())
+                                .schedule(message, new TimeSpan(1, TimeUnit.MICROSECONDS))
+                );
+                else
+                    log.error("Topic without subscribers: " + mqttMessage.topic());
+            }
         }
     }
 }
