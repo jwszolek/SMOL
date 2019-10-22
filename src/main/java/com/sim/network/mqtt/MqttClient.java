@@ -27,7 +27,7 @@ public class MqttClient extends ExternalEvent {
         this.dstAddress = dstAddress;
         this.pubTopics = (pubTopics != null) ? pubTopics.split(",") : new String[0];
 
-        lastPublishRoutine = presentTime().getTimeAsDouble(TimeUnit.MILLISECONDS);
+        lastPublishRoutine = presentTimeAsDouble();
     }
 
     @Override
@@ -51,15 +51,23 @@ public class MqttClient extends ExternalEvent {
     private void publishRoutine() {
         double presentTime = presentTime().getTimeAsDouble(TimeUnit.MILLISECONDS);
         if (pubTopics.length > 0 && ((presentTime - scheduleValue) > lastPublishRoutine)) {
-            lastPublishRoutine = presentTime().getTimeAsDouble(TimeUnit.MILLISECONDS);
+            lastPublishRoutine = presentTimeAsDouble();
 
-            int randValue = 1 + (int) (Math.random() * pubTopics.length);
-            MqttMessage message = new MqttMessage(getModel(), pubTopics[randValue - 1], UUID.randomUUID());
+            MqttMessage message = new MqttMessage(getModel(), randomTopic(), UUID.randomUUID());
             sendTraceNote(message.getName() + " Created");
 
             publish("Client -> broker | " + getName())
                     .schedule(message, new TimeSpan(10, TimeUnit.MICROSECONDS));
         }
+    }
+
+    private double presentTimeAsDouble() {
+        return presentTime().getTimeAsDouble(TimeUnit.MILLISECONDS);
+    }
+
+    private String randomTopic() {
+        int randValue = 1 + (int) (Math.random() * pubTopics.length);
+        return pubTopics[randValue - 1];
     }
 
     private MqttMessagePublishEvent publish(String logInfo) {
