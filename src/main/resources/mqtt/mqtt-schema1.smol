@@ -182,5 +182,5 @@ action "draw", {
 }
 
 action "sim", {
-    stop "15000"
+    stop "4000"
 }

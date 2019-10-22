@@ -5,14 +5,14 @@ import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeInstant;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
-@ToString
+@Slf4j
 public class TCPMessage extends Entity {
-    private String dstAddress;
     private String srcAddress;
+    private String dstAddress;
     private TimeInstant startTransmission;
     private TimeInstant stopTransmission;
     private String data;
@@ -23,6 +23,21 @@ public class TCPMessage extends Entity {
     }
 
     TimeInstant getTransmissionTime() {
+        if (startTransmission == null || stopTransmission == null) return null;
         return new TimeInstant(stopTransmission.getTimeAsDouble() - startTransmission.getTimeAsDouble());
+    }
+
+    @Override
+    public String toString() {
+        TimeInstant transmissionTime = getTransmissionTime();
+
+        return "TCPMessage{" +
+                "srcAddress='" + srcAddress + '\'' +
+                ", dstAddress='" + dstAddress + '\'' +
+                ((transmissionTime == null)
+                        ? ""
+                        : ", transmissionTime='" + transmissionTime + '\'') +
+                ", data='" + data + '\'' +
+                '}';
     }
 }

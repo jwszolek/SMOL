@@ -1,0 +1,62 @@
+tn "eth1", {
+    ip "1"
+}
+
+expander "mqtt-broker-1", {
+    connect "eth1"
+    model "mqtt"
+}
+
+/************/
+/* BROKER 1 */
+/************/
+san "mqtt-broker-1-sensor-1",{
+    connect "mqtt-broker-1"
+    pubTopics "pir"
+    freq "1500"
+}
+
+san "mqtt-broker-1-sensor-2",{
+    connect "mqtt-broker-1"
+    pubTopics "plug"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-3",{
+    connect "mqtt-broker-1"
+    pubTopics "pir, hvac"
+    freq "1500"
+}
+
+san "mqtt-broker-1-sensor-4",{
+    connect "mqtt-broker-1"
+    pubTopics "plug"
+    subTopics "pir, plug"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-5",{
+    connect "mqtt-broker-1"
+    subTopics "pir"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-6",{
+    connect "mqtt-broker-1"
+    subTopics "pir, hvac"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-7",{
+    connect "mqtt-broker-1"
+    subTopics "pir, hvac"
+    freq "500"
+}
+
+action "draw", {
+    fullmap "true"
+}
+
+action "sim", {
+    stop "10000"
+}

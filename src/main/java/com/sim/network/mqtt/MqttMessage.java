@@ -6,11 +6,11 @@ import main.java.com.sim.network.TCPMessage;
 class MqttMessage extends TCPMessage {
     MqttMessage(Model owner, String topic) {
         super(owner, "Mqtt Message", true);
-        setData(topic);
+        setTopic(topic);
     }
 
-    String getTopic() {
-        return getData();
+    private void setTopic(String topic) {
+        setData(topic);
     }
 }
 
