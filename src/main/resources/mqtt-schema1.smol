@@ -1,0 +1,186 @@
+tn "eth1", {
+    ip "1"
+}
+
+tn "eth2", {
+    ip "2"
+}
+
+tn "eth3", {
+    ip "3"
+}
+
+tn "eth4", {
+    ip "4"
+}
+
+expander "mqtt-broker-1", {
+    connect "eth1"
+    model "mqtt"
+}
+
+expander "mqtt-broker-2", {
+    connect "eth3"
+    model "mqtt"
+}
+
+expander "mqtt-broker-3", {
+    connect "eth4"
+    bridge "3"
+    model "mqtt"
+}
+
+expander "mqtt-broker-4", {
+    connect "eth2"
+    model "mqtt"
+    bridge "4"
+}
+
+/************/
+/* BROKER 4 */
+/************/
+san "mqtt-openhab",{
+    connect "mqtt-broker-4"
+    subTopics "temp,plug"
+    freq "500"
+}
+
+/************/
+/* BROKER 3 */
+/************/
+san "mqtt-broker-3-sensor-1",{
+    connect "mqtt-broker-3"
+    pubTopics "temp,plug,hvac"
+    freq "500"
+}
+
+san "mqtt-broker-3-sensor-2",{
+    connect "mqtt-broker-3"
+    pubTopics "temp,plug,hvac"
+    freq "500"
+}
+
+san "mqtt-broker-3-sensor-3",{
+    connect "mqtt-broker-3"
+    freq "1500"
+}
+
+san "mqtt-broker-3-sensor-4",{
+    connect "mqtt-broker-3"
+    freq "1500"
+}
+
+san "mqtt-broker-3-sensor-5",{
+    connect "mqtt-broker-3"
+    freq "600"
+}
+
+/************/
+/* BROKER 2 */
+/************/
+san "mqtt-broker-2-sensor-1",{
+    connect "mqtt-broker-2"
+    freq "500"
+}
+
+san "mqtt-broker-2-sensor-2",{
+    connect "mqtt-broker-2"
+    subTopics "temp,plug"
+    freq "500"
+}
+
+san "mqtt-broker-2-sensor-3",{
+    connect "mqtt-broker-2"
+    subTopics "temp"
+    freq "500"
+}
+
+san "mqtt-broker-2-sensor-4",{
+    connect "mqtt-broker-2"
+    pubTopics "temp,plug,hvac"
+    freq "500"
+}
+
+san "mqtt-broker-2-sensor-5",{
+    connect "mqtt-broker-2"
+    pubTopics "temp,hvac"
+    freq "550"
+}
+
+san "mqtt-broker-2-sensor-6",{
+    connect "mqtt-broker-2"
+    subTopics "temp,hvac"
+    freq "550"
+}
+
+san "mqtt-broker-2-sensor-7",{
+    connect "mqtt-broker-2"
+    subTopics "hvac"
+    freq "560"
+}
+
+san "mqtt-broker-2-sensor-8",{
+    connect "mqtt-broker-2"
+    subTopics "hvac"
+    freq "570"
+}
+
+san "mqtt-broker-2-sensor-8",{
+    connect "mqtt-broker-2"
+    pubTopics "hvac,plug"
+    freq "570"
+}
+
+/************/
+/* BROKER 1 */
+/************/
+san "mqtt-broker-1-sensor-1",{
+    connect "mqtt-broker-1"
+    pubTopics "default"
+    freq "1500"
+}
+
+san "mqtt-broker-1-sensor-2",{
+    connect "mqtt-broker-1"
+    pubTopics "default"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-3",{
+    connect "mqtt-broker-1"
+    pubTopics "default"
+    freq "1500"
+}
+
+san "mqtt-broker-1-sensor-4",{
+    connect "mqtt-broker-1"
+    pubTopics "default"
+    subTopics "default"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-5",{
+    connect "mqtt-broker-1"
+    subTopics "default"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-6",{
+    connect "mqtt-broker-1"
+    subTopics "default, hvac"
+    freq "500"
+}
+
+san "mqtt-broker-1-sensor-7",{
+    connect "mqtt-broker-1"
+    subTopics "default, hvac"
+    freq "500"
+}
+
+action "draw", {
+    fullmap "true"
+}
+
+action "sim", {
+    stop "15000"
+}

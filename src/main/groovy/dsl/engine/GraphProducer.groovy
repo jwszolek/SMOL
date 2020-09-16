@@ -21,6 +21,7 @@ class Adapter {
     String ip
     String generator
     String dst
+    String bridge
 }
 
 
@@ -28,6 +29,8 @@ class Sensor {
     String name
     String connect
     String destAddress
+    String pubTopics
+    String subTopics
     double freq
 }
 
@@ -35,16 +38,17 @@ class Converter {
     String name
     String connect
     String model
+    String bridge
 }
 
 class GraphProducer {
 
     private DrawFirst df
-    private HashMap<String,HBase> varList
+    private HashMap<String, HBase> varList
 
     private def components = [:]
 
-    def GraphProducer(){
+    def GraphProducer() {
         df = new DrawFirst()
         varList = new HashMap()
     }
@@ -65,15 +69,13 @@ class GraphProducer {
                     if (ak.contains("stop")) simTime = av
                 }
 
-                if(!simTime.isEmpty()){
-                    simItems.put("simTime",simTime)
+                if (!simTime.isEmpty()) {
+                    simItems.put("simTime", simTime)
                 }
             }
         }
         return simItems
     }
-
-
 
 
     def formatInput(def input) {
@@ -96,6 +98,7 @@ class GraphProducer {
                     if (ak.contains("ip")) adapter.ip = av
                     if (ak.contains("generator")) adapter.generator = av
                     if (ak.contains("dst")) adapter.dst = av
+                    if (ak.contains("bridge")) adapter.bridge = av
                 }
 
                 def newAdapter = new TNode(adapter.name, adapter.ip)
@@ -120,16 +123,18 @@ class GraphProducer {
                     valueMap.each { ck, cv ->
                         if (ck.contains("connect")) converter.connect = cv
                         if (ck.contains("model")) converter.model = cv
+                        if (ck.contains("bridge")) converter.bridge = cv
                     }
 
                     def parentName = components.find { it.key == converter.connect }?.value
 
                     if (parentName) {
                         def newConverter = new ExpNode(converter.name)
+                        newConverter.bridge = converter.bridge
                         newConverter.model = converter.model
                         newConverter.connect(parentName, 1, SpeedUnit.Mb, 10)
-                        varList.put(converter.name, newConverter)
 
+                        varList.put(converter.name, newConverter)
                         components.put(converter.name, newConverter)
                     }
                 }
@@ -148,7 +153,9 @@ class GraphProducer {
                     valueMap.each { sk, sv ->
                         if (sk.contains("connect")) sensor.connect = sv
                         if (sk.contains("destAddress")) sensor.destAddress = sv
-                        if (sk.contains("freq")) sensor.freq = Double.parseDouble((String)sv)
+                        if (sk.contains("freq")) sensor.freq = Double.parseDouble((String) sv)
+                        if (sk.contains("pubTopics")) sensor.pubTopics = sv
+                        if (sk.contains("subTopics")) sensor.subTopics = sv
                     }
 
                     def parentName = components.find { it.key == sensor.connect }?.value
@@ -158,6 +165,9 @@ class GraphProducer {
                         newSensor.connect(parentName, 1, SpeedUnit.Mb, 10)
                         newSensor.destAddress = sensor.destAddress
                         newSensor.freq = sensor.freq
+                        newSensor.pubTopics = sensor.pubTopics
+                        newSensor.subTopics = sensor.subTopics
+
                         varList.put(sensor.name, newSensor)
                     }
                 }
