@@ -5,11 +5,13 @@ import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeInstant;
 import desmoj.core.simulator.TimeSpan;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class EthCollisionMonitor extends ExternalEvent {
 
     public EthCollisionMonitor(Model owner, String name, boolean showInTrace, List<EthAdapter> adapters) {
@@ -19,34 +21,34 @@ public class EthCollisionMonitor extends ExternalEvent {
     @Override
     public void eventRoutine() throws SuspendExecution {
 
-        NetworkModel model = (NetworkModel)getModel();
+        NetworkModel model = (NetworkModel) getModel();
 
-        if(!model.ethPendingBuffer.isEmpty()){
+        if (!model.ethPendingBuffer.isEmpty()) {
 
             EthFrame framePending = model.ethPendingBuffer.first();
 
-            if(model.ethLink.isEmpty()){
+            if (model.ethLink.isEmpty()) {
                 model.ethPendingBuffer.remove(framePending);
                 framePending.setStartTransmission(presentTime());
                 model.ethLink.insert(framePending);
             }
 
-            for(EthFrame frame: model.ethPendingBuffer){
+            for (EthFrame frame : model.ethPendingBuffer) {
 
                 //sendTraceNote("ethLink startTransmision = " + model.ethLink.first().getStartTransmission());
-                TimeInstant ethLinkFrame = null;
+                TimeInstant ethLinkFrameTime = null;
 
-                if(!model.ethLink.isEmpty()) {
+                if (!model.ethLink.isEmpty()) {
                     if (model.ethLink.first().getStartTransmission() != null) {
-                        ethLinkFrame = model.ethLink.first().getStartTransmission();
+                        ethLinkFrameTime = model.ethLink.first().getStartTransmission();
                     } else {
-                        ethLinkFrame = model.ethLink.first().getInsertedTime();
+                        ethLinkFrameTime = model.ethLink.first().getInsertedTime();
                     }
                 }
 
                 //sendTraceNote("ethLink startTransmision = " + ethLinkFrame);
 
-                if(!model.ethLink.isEmpty() && Objects.equals(ethLinkFrame,frame.getInsertedTime())
+                if (!model.ethLink.isEmpty() && Objects.equals(ethLinkFrameTime, frame.getInsertedTime())
                         && !Objects.equals(model.ethLink.first().adapter.getName(), frame.adapter.getName())) {
 
 
@@ -62,8 +64,7 @@ public class EthCollisionMonitor extends ExternalEvent {
                     sendTraceNote("Collision detected= " + model.ethLink.first().getName());
 
                     sendTraceNote("Adapter name = " + frame.getName());
-                    int collision = model.getAllColisionsCouter();
-                    collision = collision + 1;
+                    int collision = model.getAllColisionsCouter() + 1;
                     model.setAllColisionsCouter(collision);
                     sendTraceNote("Collision counter = " + collision);
 
@@ -98,7 +99,7 @@ public class EthCollisionMonitor extends ExternalEvent {
 
 
     public double getCollisionWaitingTimeSlot() {
-        NetworkModel model = (NetworkModel)getModel();
+        NetworkModel model = (NetworkModel) getModel();
         // SlotTime = 512 bits for 10/100 Mb/s networks, 51.2 micro sec
         double SlotTime = 51.2;
         int n = 1;

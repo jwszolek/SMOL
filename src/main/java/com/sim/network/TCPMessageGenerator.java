@@ -27,7 +27,7 @@ public class TCPMessageGenerator extends ExternalEvent {
         msg.setSrcAddress(ethAdapter.getAdapterAddress());
         msg.setDstAddress(destAddress);
 
-        ethAdapter.outMsgQueue.insert(msg);
+        ethAdapter.getOutMsgQueue().insert(msg);
 
         //double randValue = model.getRandGeneratorValue();
         schedule(new TimeSpan(this.scheduleValue, TimeUnit.MILLISECONDS));

@@ -31,7 +31,7 @@ public class BacnetAdapter extends ExternalEvent {
         if(!inBacnetAdapterQueue.isEmpty()){
             TCPMessage msg = inBacnetAdapterQueue.first();
             inBacnetAdapterQueue.remove(msg);
-            getEthAdapter().outMsgQueue.insert(msg);
+            getEthAdapter().getOutMsgQueue().insert(msg);
         }
 
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
