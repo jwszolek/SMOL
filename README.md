@@ -171,9 +171,97 @@ Simulation results:
 * `san "name" { connect device_name, destAddress ip_address, freq value_generation_frequency }`
 
 
-## TODO list
-* Support MQTT simulation
+## MQTT simulation
+To simulate the mqtt protocol, use "mqtt" model type in the expander.
+#### Syntax elements
+* destAddress - ip address of the broker that is connected to transferring node, client publishes messages to this address       
+* pubTopics - list of topics on which client publishes messages, separated by a comma
+* subTopics - list of topics subscribed by the client, separated by a comma, the broker transfers messages to subscribed clients
 
+Example:
+```
+tn "eth1", {
+    ip "1"
+}
+
+tn "eth2", {
+    ip "2"
+}
+
+tn "eth3", {
+    ip "3"
+}
+
+tn "eth4", {
+    ip "4"
+}
+
+expander "mqtt-adapter-1", {
+    connect "eth1"
+    model "mqtt"
+}
+
+expander "mqtt-adapter-2", {
+    connect "eth2"
+    model "mqtt"
+}
+
+expander "mqtt-adapter-3", {
+    connect "eth3"
+    model "mqtt"
+}
+
+expander "mqtt-adapter-4", {
+    connect "eth4"
+    model "mqtt"
+}
+
+//broker
+san "mqtt-broker-1",{
+    connect "mqtt-adapter-1"
+    freq "50"
+}
+
+// only publish
+san "mqtt-client-1",{
+    connect "mqtt-adapter-2"
+    destAddress "1"
+    pubTopics "pir,hvac"
+    freq "500"
+}
+
+// only subscribe
+san "mqtt-client-2",{
+    connect "mqtt-adapter-3"
+    destAddress "1"
+    subTopics "pir,hvac"
+    freq "500"
+}
+
+// publish and subscribe
+san "mqtt-client-3",{
+    connect "mqtt-adapter-4"
+    destAddress "1"
+    pubTopics "pir,hvac"
+    subTopics "pir,hvac"
+    freq "500"
+}
+
+action "draw", {
+    fullmap "true"
+}
+
+action "sim", {
+    stop "10000"
+}
+```
+
+#### Logs
+* Client -> broker | client_name | ip_address: message
+* Broker -> client | client_name | ip_address: message
+* Received | client_name | ip_address: message
+
+Message contains: srcAddress, dstAddress, transmissionTime, data (topic:UUID)
 
 ## References
 * Z.Kowalczuk, J.Wszolek - Analysis Of Economical Lighting Of Highways In The Environment Of SMOL Language. Metrology and Measurement Systems, Polish Academy of Sciences. (2017)
