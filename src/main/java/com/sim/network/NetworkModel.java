@@ -12,7 +12,7 @@ import main.groovy.smoh.TNode;
 import main.java.com.sim.network.bacnet.BacnetAdapter;
 import main.java.com.sim.network.bacnet.BacnetMessageGenerator;
 import main.java.com.sim.network.mqtt.MqttAdapter;
-import main.java.com.sim.network.mqtt.MqttMessageGenerator;
+import main.java.com.sim.network.mqtt.MqttClient;
 import main.java.com.sim.network.rs232.RS232Adapter;
 import main.java.com.sim.network.rs232.RS232MessageGenerator;
 
@@ -174,17 +174,13 @@ public class NetworkModel extends Model {
                     sendTraceNote("Bacnet sensor has been created " + bacnetMsgGenerator.getName());
                 } else if (converterInfo.entrySet().stream().findFirst().get().getValue() instanceof MqttAdapter) {
                     MqttAdapter mqttAdapter = (MqttAdapter) converterInfo.values().stream().findFirst().get();
-                    MqttMessageGenerator mqttMsgGenerator
-                            = new MqttMessageGenerator(this, name, mqttAdapter, sensorObj.freq, sensorObj.pubTopics);
+                    MqttClient mqttMsgGenerator
+                            = new MqttClient(this, name, (MqttAdapter) converterInfo.values().stream().findFirst().get(), sensorObj.freq, sensorObj.destAddress, sensorObj.pubTopics);
 
                     if (sensorObj.subTopics != null) {
-                        mqttAdapter.subscribe(mqttMsgGenerator, sensorObj.subTopics);
-
-                        if (mqttAdapter.getBridges().length > 0) {
-                            Arrays.stream(mqttAdapter.getBridges()).forEach(bridge -> convertersLst.values().stream()
-                                    .filter(adapter -> ((MqttAdapter) adapter).getEthAdapter().getAdapterAddress().equals(bridge))
-                                    .forEach(adapter -> ((MqttAdapter) adapter).subscribe(mqttMsgGenerator, sensorObj.subTopics)));
-                        }
+                        convertersLst.values().stream()
+                                .filter(adapter -> ((MqttAdapter) adapter).getEthAdapter().getAdapterAddress().equals(sensorObj.destAddress))
+                                .forEach(adapter -> ((MqttAdapter) adapter).subscribe(mqttAdapter, sensorObj.subTopics));
                     }
                     mqttMsgGenerator.schedule(new TimeSpan(0));
                     sendTraceNote("Mqtt sensor has been created " + mqttMsgGenerator.getName());

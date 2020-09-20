@@ -24,7 +24,7 @@ public class MqttAdapter extends ExternalEvent {
     private final EthAdapter ethAdapter;
 
     @Getter
-    private final Map<String, List<MqttMessageGenerator>> subscribers;
+    private final Map<String, List<MqttAdapter>> subscribers;
 
     @Getter
     private final String[] bridges;
@@ -41,7 +41,9 @@ public class MqttAdapter extends ExternalEvent {
         this.bridges = (bridges != null) ? bridges.split(",") : new String[0];
     }
 
-    public void subscribe(MqttMessageGenerator mqttClient, String subTopics) {
+    public void subscribe(MqttAdapter mqttAdapter, String subTopics) {
+        log.error("Subscribe: " + ethAdapter.getAdapterAddress() + ", topics: " + subTopics);
+
         String[] topics = (subTopics != null)
                 ? (subTopics.contains(",")) ? subTopics.split(",") : new String[]{subTopics}
                 : new String[0];
@@ -49,9 +51,9 @@ public class MqttAdapter extends ExternalEvent {
         if (topics.length > 0) {
             Arrays.stream(topics).forEach(topic -> {
                 if (subscribers.containsKey(topic)) {
-                    subscribers.get(topic).add(mqttClient);
+                    subscribers.get(topic).add(mqttAdapter);
                 } else {
-                    subscribers.put(topic, new ArrayList<>(Collections.singletonList(mqttClient)));
+                    subscribers.put(topic, new ArrayList<>(Collections.singletonList(mqttAdapter)));
                 }
             });
         }
@@ -60,8 +62,6 @@ public class MqttAdapter extends ExternalEvent {
     @Override
     public void eventRoutine() {
         ethAdapterInMsgQueue();
-        outMqttAdapterQueue();
-
         inMqttAdapterQueue();
 
         schedule(new TimeSpan(1, TimeUnit.MICROSECONDS));
@@ -73,19 +73,6 @@ public class MqttAdapter extends ExternalEvent {
             inMqttAdapterQueue.remove(mqttMessage);
 
             ethAdapter.getOutMsgQueue().insert(mqttMessage);
-//            log.error("Sent (" + getName() + " | " + ethAdapter.getAdapterAddress() + "): " + mqttMessage.toString());
-        }
-    }
-
-    private void outMqttAdapterQueue() {
-        if (!outMqttAdapterQueue.isEmpty()) {
-            TCPMessage message = outMqttAdapterQueue.first();
-            outMqttAdapterQueue.remove(message);
-
-            subscribers.get(message.getData())
-                    .forEach(mqttMessageGenerator -> mqttMessageGenerator.receive(message));
-
-            log.error("Broker | " + getName() + " | " + ethAdapter.getAdapterAddress() + ": " + message);
         }
     }
 
@@ -95,13 +82,6 @@ public class MqttAdapter extends ExternalEvent {
             ethAdapter.getInMsgQueue().remove(message);
 
             outMqttAdapterQueue.insert(message);
-//            log.error("Received (" + getName() + " | " + ethAdapter.getAdapterAddress() + "): " + message);
         }
-    }
-
-    List<MqttMessageGenerator> getSubscribersByTopic(String topic) {
-        return subscribers.entrySet().stream()
-                .filter(entry -> entry.getKey().equals(topic)).findAny()
-                .map(Map.Entry::getValue).orElse(new ArrayList<>());
     }
 }
