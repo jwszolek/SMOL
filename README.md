@@ -178,7 +178,7 @@ To simulate the mqtt protocol, use "mqtt" model type in the expander.
 * pubTopics - list of topics on which client publishes messages, separated by a comma
 * subTopics - list of topics subscribed by the client, separated by a comma, the broker transfers messages to subscribed clients
 
-Example:
+#### Example
 ```
 tn "eth1", {
     ip "1"
