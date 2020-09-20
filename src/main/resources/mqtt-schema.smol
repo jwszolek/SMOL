@@ -14,14 +14,6 @@ tn "eth4", {
     ip "4"
 }
 
-tn "eth5", {
-    ip "5"
-}
-
-tn "eth6", {
-    ip "6"
-}
-
 expander "mqtt-adapter-1", {
     connect "eth1"
     model "mqtt"
@@ -42,24 +34,13 @@ expander "mqtt-adapter-4", {
     model "mqtt"
 }
 
-expander "mqtt-adapter-5", {
-    connect "eth5"
-    model "mqtt"
-}
-
-expander "mqtt-adapter-6", {
-    connect "eth6"
-    model "mqtt"
-}
-
-/************/
-/* BROKER 1 */
-/************/
+//broker
 san "mqtt-broker-1",{
     connect "mqtt-adapter-1"
-    freq "10"
+    freq "50"
 }
 
+// only publish
 san "mqtt-client-1",{
     connect "mqtt-adapter-2"
     destAddress "1"
@@ -67,6 +48,7 @@ san "mqtt-client-1",{
     freq "500"
 }
 
+// only subscribe
 san "mqtt-client-2",{
     connect "mqtt-adapter-3"
     destAddress "1"
@@ -74,25 +56,12 @@ san "mqtt-client-2",{
     freq "500"
 }
 
-/************/
-/* BROKER 2 */
-/************/
-san "mqtt-broker-2",{
-    connect "mqtt-adapter-4"
-    freq "10"
-}
-
+// publish and subscribe
 san "mqtt-client-3",{
-    connect "mqtt-adapter-5"
-    destAddress "4"
-    pubTopics "plug,temp"
-    freq "500"
-}
-
-san "mqtt-client-4",{
-    connect "mqtt-adapter-6"
-    destAddress "4"
-    subTopics "plug,temp"
+    connect "mqtt-adapter-4"
+    destAddress "1"
+    pubTopics "pir,hvac"
+    subTopics "pir,hvac"
     freq "500"
 }
 
