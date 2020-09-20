@@ -86,12 +86,21 @@
                     <target>1.8</target>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                     <verbose>true</verbose>
+                    <fork>true</fork>
+                    <compilerArguments>
+                        <javaAgentClass>lombok.launch.Agent</javaAgentClass>
+                    </compilerArguments>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
                         <version>2.7.0-01</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>1.18.10</version>
                     </dependency>
                 </dependencies>
             </plugin>
