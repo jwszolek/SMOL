@@ -22,12 +22,21 @@
             <artifactId>groovy-eclipse-compiler</artifactId>
             <version>2.7.0-01</version>
           </dependency>
+          <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+          </dependency>
         </dependencies>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
           <compilerId>groovy-eclipse-compiler</compilerId>
           <verbose>true</verbose>
+          <fork>true</fork>
+          <compilerArguments>
+            <javaAgentClass>lombok.launch.Agent</javaAgentClass>
+          </compilerArguments>
         </configuration>
       </plugin>
       <plugin>
@@ -64,6 +73,12 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.10</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>net.sf.jung</groupId>
       <artifactId>jung2</artifactId>
