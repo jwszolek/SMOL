@@ -1,3 +1,13 @@
+> [!WARNING]
+> **This repository is no longer maintained.**
+> SMOL has been rewritten in Python as **SMOLPy** — a modern, pip-installable successor with an expanded protocol library and an interactive simulation dashboard.
+>
+> **→ New project: [jwszolek/SMOLPy](https://github.com/jwszolek/SMOLPy)**
+>
+> This repository is kept for reference and historical context only. No further updates will be made here.
+
+
+
 # SMOL
 
 Network description language (SMOL), which has been designed to describe the necessary network functions, mechanisms, and devices; for the purpose of their computer simulation and verification. 
